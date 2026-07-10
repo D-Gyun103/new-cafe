@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>메뉴 추가 | 카페 어드민</title>
+  <link rel="stylesheet" href="../../css/variables.css" />
+  <link rel="stylesheet" href="create.css" />
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="list.html">← 메뉴 목록</a>
+    <div class="page-header__title">메뉴 추가</div>
+    <div class="page-header__actions"></div>
+  </header>
+
+  <main class="container menu-form-page">
+    <form class="glass-card menu-form" id="menu-form">
+      <div class="field">
+        <label for="name">메뉴 이름</label>
+        <input type="text" id="name" name="name" placeholder="예: 아메리카노" required />
+      </div>
+
+      <div class="field">
+        <label for="image">아이콘 (이모지)</label>
+        <input type="text" id="image" name="image" placeholder="예: ☕" maxlength="4" />
+        <span class="hint">한 글자 이모지를 입력해주세요. 비워두면 기본 아이콘이 적용됩니다.</span>
+      </div>
+
+      <div class="field">
+        <label for="category">카테고리</label>
+        <select id="category" name="category" required></select>
+      </div>
+
+      <div class="field">
+        <label for="price">가격 (원)</label>
+        <input type="number" id="price" name="price" min="0" step="1" placeholder="예: 4500" required />
+      </div>
+
+      <div class="field">
+        <label for="description">메뉴 설명</label>
+        <textarea id="description" name="description" placeholder="메뉴에 대한 설명을 입력해주세요." required></textarea>
+      </div>
+
+      <div class="field">
+        <label>온도 옵션</label>
+        <div class="checkbox-group" id="temperature-group"></div>
+      </div>
+
+      <div class="field">
+        <label for="badge">뱃지</label>
+        <select id="badge" name="badge">
+          <option value="">없음</option>
+          <option value="BEST">BEST</option>
+          <option value="NEW">NEW</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="checkbox-group">
+          <input type="checkbox" id="soldOut" name="soldOut" />
+          <span>품절 처리</span>
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <a class="btn btn-outline btn-block" href="list.html">취소</a>
+        <button class="btn btn-primary btn-block" type="submit">메뉴 추가</button>
+      </div>
+    </form>
+  </main>
+
+  <script type="module" src="create.js"></script>
+</body>
+</html>
