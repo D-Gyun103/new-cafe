@@ -15,6 +15,17 @@ export function getCategoryName(categoryId) {
   return CATEGORIES.find((c) => c.id === categoryId)?.name ?? categoryId;
 }
 
+const PLACEHOLDER_IMAGE =
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Caffe_Latte_cup.jpg/960px-Caffe_Latte_cup.jpg";
+
+/**
+ * 메뉴 이미지의 실제 src를 계산한다.
+ * 메뉴의 image 필드는 항상 외부 이미지 URL이며, 값이 없으면 기본 이미지로 대체한다.
+ */
+export function resolveImageSrc(image) {
+  return image || PLACEHOLDER_IMAGE;
+}
+
 /* ---------- 공통 ---------- */
 
 export function generateId(prefix = "id") {
@@ -42,6 +53,18 @@ export function showToast(message, duration = 2200) {
 
 /* ---------- 메뉴 스토리지 ---------- */
 
+// image 값이 외부 URL이 아니면(이전 버전의 이모지/로컬 파일명 캐시) 최신 시드 이미지로 교체한다
+function migrateImages(menus) {
+  let changed = false;
+  const migrated = menus.map((menu) => {
+    if (typeof menu.image === "string" && menu.image.startsWith("http")) return menu;
+    const seed = INITIAL_MENUS.find((seedMenu) => seedMenu.id === menu.id);
+    changed = true;
+    return { ...menu, image: seed ? seed.image : menu.image };
+  });
+  return { migrated, changed };
+}
+
 function readMenus() {
   const raw = localStorage.getItem(MENUS_KEY);
   if (!raw) {
@@ -49,7 +72,10 @@ function readMenus() {
     return structuredClone(INITIAL_MENUS);
   }
   try {
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    const { migrated, changed } = migrateImages(parsed);
+    if (changed) localStorage.setItem(MENUS_KEY, JSON.stringify(migrated));
+    return migrated;
   } catch {
     localStorage.setItem(MENUS_KEY, JSON.stringify(INITIAL_MENUS));
     return structuredClone(INITIAL_MENUS);
@@ -76,7 +102,7 @@ export function createMenu(data) {
     category: data.category,
     price: Number(data.price),
     description: data.description,
-    image: data.image || "☕",
+    image: data.image || "",
     temperatures: data.temperatures ?? [],
     badge: data.badge || null,
     soldOut: Boolean(data.soldOut),

@@ -1,5 +1,12 @@
 import { CATEGORIES } from "../../js/data.js";
-import { getMenus, deleteMenu, formatPrice, getCategoryName, showToast } from "../../js/utils.js";
+import {
+  getMenus,
+  deleteMenu,
+  formatPrice,
+  getCategoryName,
+  resolveImageSrc,
+  showToast,
+} from "../../js/utils.js";
 
 const grid = document.getElementById("menu-grid");
 const emptyState = document.getElementById("empty-state");
@@ -36,7 +43,7 @@ function renderMenuCard(menu) {
 
   card.innerHTML = `
     <div class="menu-card__top">
-      <span class="menu-card__image">${menu.image}</span>
+      <img class="menu-card__image" src="${resolveImageSrc(menu.image)}" alt="${menu.name}" />
       <div class="menu-card__badges">${badges.join("")}</div>
     </div>
     <div>

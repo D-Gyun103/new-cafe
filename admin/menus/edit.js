@@ -58,8 +58,9 @@ function render() {
       </div>
 
       <div class="field">
-        <label for="image">아이콘 (이모지)</label>
-        <input type="text" id="image" name="image" value="${menu.image}" maxlength="4" />
+        <label for="image">이미지 URL</label>
+        <input type="text" id="image" name="image" value="${menu.image}" placeholder="https://example.com/photo.jpg" />
+        <span class="hint">메뉴 사진의 이미지 주소 또는 파일명입니다.</span>
       </div>
 
       <div class="field">

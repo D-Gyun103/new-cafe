@@ -4,6 +4,7 @@ import {
   getCategoryName,
   getQueryParam,
   addToCart,
+  resolveImageSrc,
   showToast,
 } from "../js/utils.js";
 
@@ -57,8 +58,11 @@ function render() {
 
   root.innerHTML = `
     <div class="menu-detail__card glass-card">
-      <div class="menu-detail__badges">${renderBadges()}</div>
-      <div class="menu-detail__image">${menu.image}</div>
+      <div class="menu-detail__photo">
+        <img src="${resolveImageSrc(menu.image)}" alt="${menu.name}" />
+        <div class="menu-detail__badges">${renderBadges()}</div>
+      </div>
+      <div class="menu-detail__content">
       <div>
         <h1 class="menu-detail__name">${menu.name}</h1>
         <p class="menu-detail__desc">${menu.description}</p>
@@ -86,6 +90,7 @@ function render() {
       </div>
       `
       }
+      </div>
     </div>
   `;
 

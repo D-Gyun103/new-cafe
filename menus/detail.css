@@ -4,22 +4,41 @@
 }
 
 .menu-detail__card {
-  padding: var(--space-6);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-detail__content {
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
+  padding: var(--space-6);
 }
 
-.menu-detail__image {
-  font-size: 4.5rem;
-  line-height: 1;
-  text-align: center;
-  padding: var(--space-6) 0;
+.menu-detail__photo {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-top: 62.5%; /* 16:10 비율, aspect-ratio 미지원 브라우저(구형 Safari 등) 대응 */
   background: var(--color-cream);
-  border-radius: var(--radius-lg);
+}
+
+.menu-detail__photo img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .menu-detail__badges {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
   display: flex;
   gap: var(--space-2);
 }

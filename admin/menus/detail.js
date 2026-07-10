@@ -4,6 +4,7 @@ import {
   formatPrice,
   getCategoryName,
   getQueryParam,
+  resolveImageSrc,
   showToast,
 } from "../../js/utils.js";
 
@@ -37,7 +38,7 @@ function render() {
   root.innerHTML = `
     <div class="menu-detail__card glass-card">
       <div class="menu-detail__top">
-        <div class="menu-detail__image">${menu.image}</div>
+        <img class="menu-detail__image" src="${resolveImageSrc(menu.image)}" alt="${menu.name}" />
         <div class="menu-detail__heading">
           <div class="menu-detail__badges">${badges.join("")}</div>
           <h1 class="menu-detail__name">${menu.name}</h1>

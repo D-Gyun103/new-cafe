@@ -17,13 +17,9 @@
 }
 
 .menu-detail__image {
-  font-size: 4rem;
-  line-height: 1;
-  width: 96px;
-  height: 96px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
   background: var(--color-cream);
   border-radius: var(--radius-lg);
   flex-shrink: 0;
