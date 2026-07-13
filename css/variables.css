@@ -702,6 +702,7 @@ button {
 .field input[type="text"],
 .field input[type="number"],
 .field input[type="search"],
+.field input[type="password"],
 .field select,
 .field textarea {
   width: 100%;

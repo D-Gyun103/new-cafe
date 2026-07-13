@@ -29,6 +29,34 @@
   line-height: 1.6;
 }
 
+.password-field {
+  position: relative;
+}
+
+.password-field input[type="password"],
+.password-field input[type="text"] {
+  padding-right: 56px;
+}
+
+.password-field__toggle {
+  position: absolute;
+  top: 50%;
+  right: var(--space-2);
+  transform: translateY(-50%);
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  background: none;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.password-field__toggle:hover {
+  color: var(--color-primary);
+}
+
 .login-card__error {
   margin-bottom: var(--space-3);
   font-size: var(--font-size-sm);

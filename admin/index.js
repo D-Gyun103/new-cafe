@@ -14,6 +14,7 @@ import {
 requireAdminAuth();
 
 const statsEl = document.getElementById("dashboard-stats");
+const revenueEl = document.getElementById("dashboard-revenue");
 const recentOrdersEl = document.getElementById("recent-orders");
 const emptyState = document.getElementById("empty-state");
 
@@ -26,21 +27,33 @@ function statCardHTML(label, value) {
   `;
 }
 
+function renderRevenue() {
+  const orders = getOrders();
+  const validOrders = orders.filter((order) => (order.status ?? "received") !== "canceled");
+  const revenue = validOrders.reduce((sum, order) => sum + order.totalPrice, 0);
+
+  revenueEl.innerHTML = `
+    <article class="revenue-banner">
+      <div class="revenue-banner__info">
+        <span class="revenue-banner__label">총 매출</span>
+        <p class="revenue-banner__desc">취소된 주문을 제외한 ${validOrders.length}건의 주문 합계입니다.</p>
+      </div>
+      <strong class="revenue-banner__value">${formatPrice(revenue)}</strong>
+    </article>
+  `;
+}
+
 function renderStats() {
   const menus = getMenus();
   const orders = getOrders();
   const feedbacks = getFeedbacks();
   const soldOutCount = menus.filter((menu) => menu.soldOut).length;
   const pendingFeedbackCount = feedbacks.filter((feedback) => !feedback.reply).length;
-  const revenue = orders
-    .filter((order) => (order.status ?? "received") !== "canceled")
-    .reduce((sum, order) => sum + order.totalPrice, 0);
 
   statsEl.innerHTML = [
     statCardHTML("전체 메뉴", `${menus.length}개`),
     statCardHTML("품절 메뉴", `${soldOutCount}개`),
     statCardHTML("전체 주문", `${orders.length}건`),
-    statCardHTML("총 매출", formatPrice(revenue)),
     statCardHTML("미답변 건의", `${pendingFeedbackCount}건`),
   ].join("");
 }
@@ -77,6 +90,7 @@ function renderRecentOrders() {
   recentOrdersEl.innerHTML = orders.map(recentOrderHTML).join("");
 }
 
+renderRevenue();
 renderStats();
 renderRecentOrders();
 

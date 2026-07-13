@@ -5,6 +5,43 @@
   gap: var(--space-7);
 }
 
+/* ===== 총 매출 배너 ===== */
+.revenue-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-4) var(--space-7);
+  background: linear-gradient(100deg, var(--color-primary), var(--color-primary-light));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  color: #fff;
+}
+
+.revenue-banner__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.revenue-banner__label {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.revenue-banner__desc {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.revenue-banner__value {
+  flex-shrink: 0;
+  font-size: clamp(1.5rem, 3.5vw, 2.125rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
 /* ===== 통계 카드 ===== */
 .dashboard-stats {
   display: grid;
@@ -127,5 +164,11 @@
 @media (max-width: 720px) {
   .dashboard-stats {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .revenue-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
   }
 }
