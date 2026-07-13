@@ -4,6 +4,7 @@ import {
   formatDateTime,
   getQueryParam,
   resolveImageSrc,
+  updateCartBadge,
 } from "../js/utils.js";
 
 const root = document.getElementById("order-detail-root");
@@ -70,3 +71,4 @@ function render() {
 }
 
 render();
+updateCartBadge();

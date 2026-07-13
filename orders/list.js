@@ -1,4 +1,10 @@
-import { getOrders, formatPrice, formatDateTime, resolveImageSrc } from "../js/utils.js";
+import {
+  getOrders,
+  formatPrice,
+  formatDateTime,
+  resolveImageSrc,
+  updateCartBadge,
+} from "../js/utils.js";
 
 const root = document.getElementById("orders-root");
 const emptyState = document.getElementById("empty-state");
@@ -40,3 +46,4 @@ function render() {
 }
 
 render();
+updateCartBadge();
