@@ -1,17 +1,20 @@
+import { ORDER_STATUSES } from "../../js/data.js";
 import {
   getOrderById,
+  updateOrderStatus,
+  deleteOrder,
   formatPrice,
   formatDateTime,
   getQueryParam,
   resolveImageSrc,
-  updateCartBadge,
   getOrderStatusName,
   getOrderStatusBadgeClass,
-} from "../js/utils.js";
+  showToast,
+} from "../../js/utils.js";
 
 const root = document.getElementById("order-detail-root");
 const id = getQueryParam("id");
-const order = id ? getOrderById(id) : null;
+let order = id ? getOrderById(id) : null;
 
 function itemRowHTML(item) {
   return `
@@ -38,14 +41,17 @@ function render() {
     root.innerHTML = `
       <div class="empty-state">
         <div class="empty-state__icon">😕</div>
-        <p>주문 내역을 찾을 수 없습니다.</p>
-        <a class="btn btn-primary btn-sm" href="list.html">주문 내역으로</a>
+        <p>주문을 찾을 수 없습니다.</p>
+        <a class="btn btn-primary btn-sm" href="list.html">주문 목록으로</a>
       </div>
     `;
     return;
   }
 
   const status = order.status ?? "received";
+  const statusOptions = ORDER_STATUSES.map(
+    (s) => `<option value="${s.id}" ${s.id === status ? "selected" : ""}>${s.name}</option>`
+  ).join("");
 
   root.innerHTML = `
     <div class="order-detail__card glass-card">
@@ -69,10 +75,30 @@ function render() {
         </div>
       </div>
 
-      <a class="btn btn-primary btn-block" href="../menus/list.html">메뉴 더 보러 가기</a>
+      <div class="order-detail__section">
+        <h3>주문 상태 변경</h3>
+        <select id="status-select" class="order-detail__status-select">${statusOptions}</select>
+      </div>
+
+      <div class="order-detail__actions">
+        <button class="btn btn-danger btn-block" id="delete-btn" type="button">주문 삭제</button>
+      </div>
     </div>
   `;
+
+  document.getElementById("status-select").addEventListener("change", (e) => {
+    order = updateOrderStatus(order.id, e.target.value);
+    showToast("주문 상태가 변경되었습니다.");
+    render();
+  });
+
+  document.getElementById("delete-btn").addEventListener("click", () => {
+    if (confirm("이 주문을 삭제하시겠습니까?")) {
+      deleteOrder(order.id);
+      showToast("주문이 삭제되었습니다.");
+      window.location.href = "list.html";
+    }
+  });
 }
 
 render();
-updateCartBadge();

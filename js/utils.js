@@ -1,6 +1,6 @@
 // ===== 카페 앱 - 공통 유틸리티 (스토리지, 카트, 포맷 등) =====
 
-import { CATEGORIES, INITIAL_MENUS } from "./data.js";
+import { CATEGORIES, INITIAL_MENUS, ORDER_STATUSES } from "./data.js";
 
 const MENUS_KEY = "cafe_menus";
 const MENUS_VERSION_KEY = "cafe_menus_version";
@@ -31,6 +31,21 @@ export function formatDateTime(iso) {
 
 export function getCategoryName(categoryId) {
   return CATEGORIES.find((c) => c.id === categoryId)?.name ?? categoryId;
+}
+
+export function getOrderStatusName(statusId) {
+  return ORDER_STATUSES.find((s) => s.id === statusId)?.name ?? statusId;
+}
+
+const ORDER_STATUS_BADGE_CLASS = {
+  received: "badge-category",
+  preparing: "badge-best",
+  done: "badge-new",
+  canceled: "badge-soldout",
+};
+
+export function getOrderStatusBadgeClass(statusId) {
+  return ORDER_STATUS_BADGE_CLASS[statusId] ?? "badge-category";
 }
 
 // utils.js 자신의 위치(import.meta.url) 기준으로 images/menu/를 가리킨다.
@@ -274,12 +289,26 @@ export function createOrder() {
     items,
     totalCount: items.reduce((sum, item) => sum + item.quantity, 0),
     totalPrice: items.reduce((sum, item) => sum + item.subtotal, 0),
+    status: "received",
     createdAt: new Date().toISOString(),
   };
 
   writeOrders([...readOrders(), order]);
   writeCart([]);
   return order;
+}
+
+export function updateOrderStatus(id, status) {
+  const orders = readOrders();
+  const order = orders.find((o) => o.id === id);
+  if (!order) return null;
+  order.status = status;
+  writeOrders(orders);
+  return order;
+}
+
+export function deleteOrder(id) {
+  writeOrders(readOrders().filter((order) => order.id !== id));
 }
 
 /* ---------- 프로필 (마이페이지) ---------- */

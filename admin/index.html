@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>대시보드 | 카페 어드민</title>
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <header class="page-header">
+    <div class="page-header__title">관리자 대시보드</div>
+    <div class="page-header__actions"></div>
+  </header>
+
+  <main class="container admin-dashboard">
+    <section class="dashboard-stats" id="dashboard-stats"></section>
+
+    <section aria-label="바로가기">
+      <div class="quick-links">
+        <a class="quick-link" href="menus/list.html">
+          <span class="quick-link__index">01</span>
+          <strong class="quick-link__title">메뉴 관리</strong>
+          <p class="quick-link__desc">메뉴를 추가·수정하고 품절 상태를 관리하세요.</p>
+        </a>
+        <a class="quick-link" href="orders/list.html">
+          <span class="quick-link__index">02</span>
+          <strong class="quick-link__title">주문 관리</strong>
+          <p class="quick-link__desc">들어온 주문을 확인하고 상태를 변경하세요.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="dashboard-section">
+      <div class="dashboard-section__header">
+        <h2>최근 주문</h2>
+        <a class="dashboard-section__more" href="orders/list.html">전체보기 →</a>
+      </div>
+      <div class="dashboard-orders" id="recent-orders"></div>
+      <div class="empty-state" id="empty-state" hidden>
+        <div class="empty-state__icon">🧾</div>
+        <p>아직 들어온 주문이 없습니다.</p>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="index.js"></script>
+</body>
+</html>

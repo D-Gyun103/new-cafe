@@ -16,51 +16,60 @@
 
   <main class="container menu-form-page">
     <form class="glass-card menu-form" id="menu-form">
-      <div class="field">
-        <label for="name">메뉴 이름</label>
-        <input type="text" id="name" name="name" placeholder="예: 아메리카노" required />
-      </div>
+      <div class="menu-form__layout">
+        <div class="menu-form__media">
+          <div class="menu-form__preview">
+            <img id="image-preview" src="" alt="메뉴 이미지 미리보기" />
+          </div>
+          <div class="field">
+            <label for="image">이미지 URL</label>
+            <input type="text" id="image" name="image" placeholder="https://example.com/photo.jpg" />
+            <span class="hint">메뉴 사진의 이미지 주소를 입력해주세요. 비워두면 기본 이미지가 적용됩니다.</span>
+          </div>
+        </div>
 
-      <div class="field">
-        <label for="image">이미지 URL</label>
-        <input type="text" id="image" name="image" placeholder="https://example.com/photo.jpg" />
-        <span class="hint">메뉴 사진의 이미지 주소를 입력해주세요. 비워두면 기본 이미지가 적용됩니다.</span>
-      </div>
+        <div class="menu-form__fields">
+          <div class="field">
+            <label for="name">메뉴 이름</label>
+            <input type="text" id="name" name="name" placeholder="예: 아메리카노" required />
+          </div>
 
-      <div class="field">
-        <label for="category">카테고리</label>
-        <select id="category" name="category" required></select>
-      </div>
+          <div class="field">
+            <label for="category">카테고리</label>
+            <select id="category" name="category" required></select>
+          </div>
 
-      <div class="field">
-        <label for="price">가격 (원)</label>
-        <input type="number" id="price" name="price" min="0" step="1" placeholder="예: 4500" required />
-      </div>
+          <div class="field">
+            <label for="price">가격 (원)</label>
+            <input type="number" id="price" name="price" min="0" step="1" placeholder="예: 4500" required />
+          </div>
 
-      <div class="field">
-        <label for="description">메뉴 설명</label>
-        <textarea id="description" name="description" placeholder="메뉴에 대한 설명을 입력해주세요." required></textarea>
-      </div>
+          <div class="field">
+            <label for="description">메뉴 설명</label>
+            <textarea id="description" name="description" placeholder="메뉴에 대한 설명을 입력해주세요." required></textarea>
+          </div>
 
-      <div class="field">
-        <label>온도 옵션</label>
-        <div class="checkbox-group" id="temperature-group"></div>
-      </div>
+          <div class="field">
+            <label>온도 옵션</label>
+            <div class="checkbox-group" id="temperature-group"></div>
+          </div>
 
-      <div class="field">
-        <label for="badge">뱃지</label>
-        <select id="badge" name="badge">
-          <option value="">없음</option>
-          <option value="BEST">BEST</option>
-          <option value="NEW">NEW</option>
-        </select>
-      </div>
+          <div class="field">
+            <label for="badge">뱃지</label>
+            <select id="badge" name="badge">
+              <option value="">없음</option>
+              <option value="BEST">BEST</option>
+              <option value="NEW">NEW</option>
+            </select>
+          </div>
 
-      <div class="field">
-        <label class="checkbox-group">
-          <input type="checkbox" id="soldOut" name="soldOut" />
-          <span>품절 처리</span>
-        </label>
+          <div class="field">
+            <label class="checkbox-group">
+              <input type="checkbox" id="soldOut" name="soldOut" />
+              <span>품절 처리</span>
+            </label>
+          </div>
+        </div>
       </div>
 
       <div class="form-actions">

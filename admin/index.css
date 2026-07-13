@@ -1,0 +1,131 @@
+.admin-dashboard {
+  padding: var(--space-6) var(--space-5) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+
+/* ===== 통계 카드 ===== */
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.stat-card__label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.stat-card__value {
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--color-primary-dark);
+}
+
+/* ===== 최근 주문 ===== */
+.dashboard-section__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+}
+
+.dashboard-section__header h2 {
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  color: var(--color-primary-dark);
+  letter-spacing: -0.01em;
+}
+
+.dashboard-section__more {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+}
+
+.dashboard-section__more:hover {
+  color: var(--color-primary);
+}
+
+.dashboard-orders {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.dashboard-order {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.dashboard-order:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-md);
+}
+
+.dashboard-order__photo {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  background: var(--color-cream);
+}
+
+.dashboard-order__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.dashboard-order__top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.dashboard-order__date {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.dashboard-order__items {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dashboard-order__price {
+  flex-shrink: 0;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 720px) {
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -4,6 +4,8 @@ import {
   formatDateTime,
   resolveImageSrc,
   updateCartBadge,
+  getOrderStatusName,
+  getOrderStatusBadgeClass,
 } from "../js/utils.js";
 
 const root = document.getElementById("orders-root");
@@ -12,6 +14,7 @@ const emptyState = document.getElementById("empty-state");
 function orderCardHTML(order) {
   const firstItem = order.items[0];
   const itemsPreview = order.items.map((item) => item.name).join(", ");
+  const status = order.status ?? "received";
 
   return `
     <a class="order-card glass-card" href="detail.html?id=${order.id}">
@@ -21,7 +24,7 @@ function orderCardHTML(order) {
       <div class="order-card__body">
         <div class="order-card__top">
           <span class="order-card__date">${formatDateTime(order.createdAt)}</span>
-          <span class="badge badge-new">주문완료</span>
+          <span class="badge ${getOrderStatusBadgeClass(status)}">${getOrderStatusName(status)}</span>
         </div>
         <p class="order-card__items">${itemsPreview}</p>
         <div class="order-card__bottom">

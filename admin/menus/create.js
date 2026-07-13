@@ -1,9 +1,19 @@
 import { CATEGORIES, TEMPERATURES } from "../../js/data.js";
-import { createMenu, showToast } from "../../js/utils.js";
+import { createMenu, showToast, resolveImageSrc } from "../../js/utils.js";
 
 const form = document.getElementById("menu-form");
 const categorySelect = document.getElementById("category");
 const temperatureGroup = document.getElementById("temperature-group");
+const imageInput = document.getElementById("image");
+const imagePreview = document.getElementById("image-preview");
+
+imagePreview.src = resolveImageSrc("");
+imagePreview.addEventListener("error", () => {
+  imagePreview.src = resolveImageSrc("");
+});
+imageInput.addEventListener("input", (e) => {
+  imagePreview.src = resolveImageSrc(e.target.value.trim());
+});
 
 CATEGORIES.forEach((category) => {
   const option = document.createElement("option");

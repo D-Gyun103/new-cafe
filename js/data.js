@@ -12,6 +12,13 @@ export const TEMPERATURES = [
   { id: "ICE", name: "ICE" },
 ];
 
+export const ORDER_STATUSES = [
+  { id: "received", name: "접수" },
+  { id: "preparing", name: "준비중" },
+  { id: "done", name: "완료" },
+  { id: "canceled", name: "취소" },
+];
+
 // 최초 1회 localStorage 시딩에 사용되는 기본 메뉴 데이터
 export const INITIAL_MENUS = [
   {
