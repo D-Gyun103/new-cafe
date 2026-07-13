@@ -122,6 +122,9 @@ function render() {
     addToCart({ menuId: menu.id, temperature: selectedTemp, quantity });
     showToast(`${menu.name}${quantity}개를 장바구니에 담았습니다.`);
     updateCartBadge();
+    setTimeout(() => {
+      window.location.href = "list.html";
+    }, 700);
   });
 }
 
