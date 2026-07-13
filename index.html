@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>카페 | 홈</title>
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <header class="page-header">
+    <div class="page-header__title">☕ 카페</div>
+    <div class="page-header__actions">
+      <a class="cart-link" href="orders/list.html">🧾 주문내역</a>
+      <a class="cart-link" href="basket/list.html">
+        🧺 장바구니
+        <span class="cart-link__count" id="cart-count" hidden>0</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="container home">
+    <section class="hero">
+      <p class="hero__eyebrow">따뜻한 브라운 톤의 작은 공간</p>
+      <h1 class="hero__title">오늘 하루, 커피 한 잔의 여유</h1>
+      <p class="hero__desc">직접 로스팅한 원두와 정성으로 만든 디저트를 만나보세요.</p>
+      <a class="btn btn-primary" href="menus/list.html">메뉴 보러 가기</a>
+    </section>
+
+    <section class="quick-links">
+      <a class="quick-link" href="menus/list.html">
+        <span class="quick-link__icon">☕</span>
+        <span class="quick-link__label">메뉴</span>
+      </a>
+      <a class="quick-link" href="basket/list.html">
+        <span class="quick-link__icon">🧺</span>
+        <span class="quick-link__label">장바구니</span>
+      </a>
+      <a class="quick-link" href="orders/list.html">
+        <span class="quick-link__icon">🧾</span>
+        <span class="quick-link__label">주문내역</span>
+      </a>
+    </section>
+
+    <section class="home-section">
+      <div class="home-section__header">
+        <h2>지금 인기있는 메뉴</h2>
+        <a class="home-section__more" href="menus/list.html">전체보기 →</a>
+      </div>
+      <div class="home-section__grid" id="best-root"></div>
+    </section>
+  </main>
+
+  <script type="module" src="index.js"></script>
+</body>
+</html>

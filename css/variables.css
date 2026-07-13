@@ -213,6 +213,106 @@ button {
   box-shadow: var(--shadow-md);
 }
 
+/* ===== 메뉴 카드 (메뉴 목록/홈 공용) ===== */
+.menu-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.menu-card:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-md);
+}
+
+.menu-card__photo {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-top: 75%; /* 4:3 비율, aspect-ratio 미지원 브라우저(구형 Safari 등) 대응 */
+  overflow: hidden;
+  background: var(--color-cream);
+}
+
+.menu-card__photo img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.menu-card:hover .menu-card__photo img {
+  transform: scale(1.04);
+}
+
+.menu-card__badges {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.menu-card__soldout-scrim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 12, 6, 0.45);
+}
+
+.menu-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-5) var(--space-5);
+}
+
+.menu-card__name {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.menu-card__desc {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.5em;
+  margin-bottom: var(--space-2);
+}
+
+.menu-card__price {
+  font-size: var(--font-size-md);
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.menu-card.is-soldout .menu-card__photo img {
+  filter: grayscale(60%);
+}
+
 /* ===== 버튼 ===== */
 .btn {
   display: inline-flex;
