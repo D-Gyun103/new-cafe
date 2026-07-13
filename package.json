@@ -1,12 +1,11 @@
 {
   "name": "new-cafe",
   "version": "1.0.0",
-  "description": "A cafe ordering and management web project.",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "serve -l 3158"
-
   },
   "keywords": [],
   "author": "",
