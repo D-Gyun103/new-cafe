@@ -1,3 +1,28 @@
+/* ===== 헤더 (홈 전용: 상호를 왼쪽에, 포인트 서체로 강조) ===== */
+.page-header--home {
+  grid-template-columns: auto 1fr;
+}
+
+.page-header__title--brand {
+  grid-column: 1;
+  justify-self: start;
+  text-align: left;
+  font-family: "Playfair Display", "Noto Serif KR", serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 1.6rem;
+  letter-spacing: 0.01em;
+  background: linear-gradient(100deg, var(--color-primary-dark), var(--color-primary) 60%, var(--color-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.page-header--home .page-header__actions {
+  grid-column: 2;
+}
+
 /* ===== 히어로 ===== */
 .hero {
   position: relative;
@@ -230,7 +255,10 @@
 }
 
 .site-footer__brand {
+  font-family: "Playfair Display", "Noto Serif KR", serif;
+  font-style: italic;
   font-weight: 800;
+  font-size: var(--font-size-lg);
   color: var(--color-primary-dark);
 }
 
@@ -238,6 +266,20 @@
 .site-footer__copyright {
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
+}
+
+.site-footer__admin {
+  margin-top: var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--transition-fast);
+}
+
+.site-footer__admin:hover {
+  color: var(--color-primary);
 }
 
 /* ===== 반응형 ===== */

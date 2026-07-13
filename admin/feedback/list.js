@@ -5,7 +5,10 @@ import {
   formatDateTime,
   getFeedbackCategoryName,
   showToast,
+  requireAdminAuth,
 } from "../../js/utils.js";
+
+requireAdminAuth();
 
 const listEl = document.getElementById("feedback-list");
 const emptyState = document.getElementById("empty-state");

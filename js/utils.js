@@ -11,6 +11,11 @@ const CART_KEY = "cafe_cart";
 const ORDERS_KEY = "cafe_orders";
 const PROFILE_KEY = "cafe_profile";
 const FEEDBACKS_KEY = "cafe_feedbacks";
+const ADMIN_AUTH_KEY = "cafe_admin_authed";
+
+// 데모용 간단 로그인이라 자격 증명을 클라이언트 코드에 그대로 둔다.
+// 실제 서비스라면 서버 인증으로 대체해야 한다.
+const ADMIN_CREDENTIALS = { username: "admin", password: "admin123" };
 
 const DEFAULT_PROFILE = {
   name: "이서연",
@@ -406,4 +411,33 @@ export function replyToFeedback(id, reply) {
 
 export function deleteFeedback(id) {
   writeFeedbacks(readFeedbacks().filter((feedback) => feedback.id !== id));
+}
+
+/* ---------- 관리자 로그인 (간단 세션 인증) ---------- */
+
+export function loginAdmin(username, password) {
+  if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+    sessionStorage.setItem(ADMIN_AUTH_KEY, "true");
+    return true;
+  }
+  return false;
+}
+
+export function isAdminAuthed() {
+  return sessionStorage.getItem(ADMIN_AUTH_KEY) === "true";
+}
+
+export function logoutAdmin() {
+  sessionStorage.removeItem(ADMIN_AUTH_KEY);
+}
+
+/**
+ * 로그인이 안 되어 있으면 관리자 로그인 페이지로 즉시 이동시킨다.
+ * 각 관리자 페이지 스크립트 최상단에서 호출한다.
+ */
+export function requireAdminAuth() {
+  if (isAdminAuthed()) return true;
+  const adminRoot = window.location.pathname.split("/admin/")[0] + "/admin/";
+  window.location.href = `${adminRoot}login.html`;
+  return false;
 }

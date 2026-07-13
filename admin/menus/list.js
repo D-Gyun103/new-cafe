@@ -6,7 +6,10 @@ import {
   getCategoryName,
   resolveImageSrc,
   showToast,
+  requireAdminAuth,
 } from "../../js/utils.js";
+
+requireAdminAuth();
 
 const grid = document.getElementById("menu-grid");
 const emptyState = document.getElementById("empty-state");
@@ -46,7 +49,7 @@ function renderMenuCard(menu) {
       <img class="menu-card__image" src="${resolveImageSrc(menu.image)}" alt="${menu.name}" />
       <div class="menu-card__badges">${badges.join("")}</div>
     </div>
-    <div>
+    <div class="menu-card__info">
       <span class="badge badge-category">${getCategoryName(menu.category)}</span>
       <h3 class="menu-card__name">${menu.name}</h3>
       <p class="menu-card__desc">${menu.description}</p>

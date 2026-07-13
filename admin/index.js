@@ -7,7 +7,11 @@ import {
   resolveImageSrc,
   getOrderStatusName,
   getOrderStatusBadgeClass,
+  requireAdminAuth,
+  logoutAdmin,
 } from "../js/utils.js";
+
+requireAdminAuth();
 
 const statsEl = document.getElementById("dashboard-stats");
 const recentOrdersEl = document.getElementById("recent-orders");
@@ -75,3 +79,8 @@ function renderRecentOrders() {
 
 renderStats();
 renderRecentOrders();
+
+document.getElementById("logout-btn").addEventListener("click", () => {
+  logoutAdmin();
+  window.location.href = "login.html";
+});

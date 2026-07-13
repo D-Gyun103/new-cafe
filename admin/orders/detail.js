@@ -10,7 +10,10 @@ import {
   getOrderStatusName,
   getOrderStatusBadgeClass,
   showToast,
+  requireAdminAuth,
 } from "../../js/utils.js";
+
+requireAdminAuth();
 
 const root = document.getElementById("order-detail-root");
 const id = getQueryParam("id");

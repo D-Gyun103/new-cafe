@@ -1,5 +1,7 @@
 import { CATEGORIES, TEMPERATURES } from "../../js/data.js";
-import { createMenu, showToast, resolveImageSrc } from "../../js/utils.js";
+import { createMenu, showToast, resolveImageSrc, requireAdminAuth } from "../../js/utils.js";
+
+requireAdminAuth();
 
 const form = document.getElementById("menu-form");
 const categorySelect = document.getElementById("category");

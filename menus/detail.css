@@ -50,6 +50,7 @@
 }
 
 .menu-detail__desc {
+  margin-top: var(--space-4);
   color: var(--color-text-muted);
   line-height: 1.7;
 }

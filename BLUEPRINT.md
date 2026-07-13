@@ -47,6 +47,9 @@ cafe-app/
 │
 ├── 🔴 관리자/사장
 │   └── admin/
+│       ├── login.html                # 관리자 로그인
+│       ├── login.css
+│       ├── login.js
 │       ├── index.html                # 대시보드
 │       ├── index.css
 │       ├── index.js
@@ -96,7 +99,7 @@ cafe-app/
 | 역할 | 경로 | 주요 기능 |
 |------|------|-----------|
 | **고객** | `/`, `/menus/`, `/my/`, `/basket/`, `/orders/`, `/feedback/` | 메인, 메뉴 조회, 마이페이지, 장바구니, 주문 내역, 불편/건의사항 제출 |
-| **관리자/사장** | `/admin/`, `/admin/menus/`, `/admin/orders/`, `/admin/feedback/` | 대시보드, 메뉴 CRUD, 주문 관리, 건의함 열람·답변·수정·삭제 |
+| **관리자/사장** | `/admin/`, `/admin/menus/`, `/admin/orders/`, `/admin/feedback/` | 로그인 후 대시보드, 메뉴 CRUD, 주문 관리, 건의함 열람·답변·수정·삭제 |
 
 ## 🎨 디자인
 
@@ -197,3 +200,11 @@ cafe-app/
 - [x] `admin/feedback/detail.html` — 상세 (답변 등록/수정, 삭제)
 - [x] `admin/feedback/detail.css`
 - [x] `admin/feedback/detail.js`
+
+### 10단계: 관리자 로그인 (간단 세션 인증)
+
+- [x] `admin/login.html` — 로그인 폼
+- [x] `admin/login.css`
+- [x] `admin/login.js`
+- [x] 홈 푸터에 "관리자 로그인" 진입점 추가
+- [x] 기존 관리자 페이지 전체(`admin/index.js`, `admin/menus/*`, `admin/orders/*`, `admin/feedback/*`)에 인증 가드 적용

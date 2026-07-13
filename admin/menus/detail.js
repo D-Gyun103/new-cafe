@@ -6,7 +6,10 @@ import {
   getQueryParam,
   resolveImageSrc,
   showToast,
+  requireAdminAuth,
 } from "../../js/utils.js";
+
+requireAdminAuth();
 
 const root = document.getElementById("menu-detail-root");
 const id = getQueryParam("id");

@@ -6,7 +6,10 @@ import {
   getFeedbackCategoryName,
   getQueryParam,
   showToast,
+  requireAdminAuth,
 } from "../../js/utils.js";
+
+requireAdminAuth();
 
 const root = document.getElementById("feedback-detail-root");
 const id = getQueryParam("id");

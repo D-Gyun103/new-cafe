@@ -5,7 +5,10 @@ import {
   getQueryParam,
   showToast,
   resolveImageSrc,
+  requireAdminAuth,
 } from "../../js/utils.js";
+
+requireAdminAuth();
 
 const root = document.getElementById("menu-form-root");
 const id = getQueryParam("id");

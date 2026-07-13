@@ -9,7 +9,10 @@ import {
   getOrderStatusName,
   getOrderStatusBadgeClass,
   showToast,
+  requireAdminAuth,
 } from "../../js/utils.js";
+
+requireAdminAuth();
 
 const listEl = document.getElementById("order-list");
 const emptyState = document.getElementById("empty-state");
