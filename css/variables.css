@@ -169,6 +169,40 @@ button {
   color: var(--color-primary);
 }
 
+/* ===== 장바구니 링크 (헤더) ===== */
+.cart-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  transition: color var(--transition-fast);
+}
+
+.cart-link:hover {
+  color: var(--color-primary);
+}
+
+.cart-link__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-full);
+  background: var(--color-danger);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+.cart-link__count[hidden] {
+  display: none;
+}
+
 /* ===== 글래스 카드 ===== */
 .glass-card {
   background: var(--glass-bg);

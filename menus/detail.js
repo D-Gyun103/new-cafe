@@ -6,6 +6,7 @@ import {
   addToCart,
   resolveImageSrc,
   showToast,
+  updateCartBadge,
 } from "../js/utils.js";
 
 const root = document.getElementById("menu-detail-root");
@@ -120,6 +121,7 @@ function render() {
   document.getElementById("add-cart-btn").addEventListener("click", () => {
     addToCart({ menuId: menu.id, temperature: selectedTemp, quantity });
     showToast(`${menu.name}${quantity}개를 장바구니에 담았습니다.`);
+    updateCartBadge();
   });
 }
 
@@ -129,3 +131,4 @@ function updateQuantityUI() {
 }
 
 render();
+updateCartBadge();

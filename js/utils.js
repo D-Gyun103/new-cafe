@@ -187,3 +187,19 @@ export function removeFromCart(cartItemId) {
 export function getCartCount() {
   return readCart().reduce((sum, item) => sum + item.quantity, 0);
 }
+
+export function clearCart() {
+  writeCart([]);
+}
+
+/**
+ * id="cart-count" 뱃지가 있는 페이지에서 호출하면
+ * 장바구니 담긴 수량으로 갱신해준다. 뱃지가 없으면 아무 동작 안 함.
+ */
+export function updateCartBadge() {
+  const badge = document.getElementById("cart-count");
+  if (!badge) return;
+  const count = getCartCount();
+  badge.textContent = count;
+  badge.hidden = count === 0;
+}

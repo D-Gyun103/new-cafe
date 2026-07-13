@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>장바구니 | 카페</title>
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="list.css" />
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="../menus/list.html">← 메뉴로</a>
+    <div class="page-header__title">🧺 장바구니</div>
+    <div class="page-header__actions"></div>
+  </header>
+
+  <main class="container basket">
+    <div class="basket__list" id="basket-root"></div>
+
+    <div class="empty-state" id="empty-state" hidden>
+      <div class="empty-state__icon">🧺</div>
+      <p>장바구니가 비어 있습니다.</p>
+      <a class="btn btn-primary btn-sm" href="../menus/list.html">메뉴 보러 가기</a>
+    </div>
+
+    <div class="basket__summary" id="basket-summary" hidden>
+      <div class="basket__summary-row">
+        <span>총 수량</span>
+        <span id="summary-count">0개</span>
+      </div>
+      <div class="basket__summary-row basket__summary-row--total">
+        <span>총 결제금액</span>
+        <span id="summary-total">0원</span>
+      </div>
+      <button class="btn btn-primary btn-block" id="order-btn" type="button">주문하기</button>
+    </div>
+  </main>
+
+  <script type="module" src="list.js"></script>
+</body>
+</html>

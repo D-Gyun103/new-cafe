@@ -1,5 +1,5 @@
 import { CATEGORIES } from "../js/data.js";
-import { getMenus, formatPrice, resolveImageSrc } from "../js/utils.js";
+import { getMenus, formatPrice, resolveImageSrc, updateCartBadge } from "../js/utils.js";
 
 const root = document.getElementById("menu-root");
 const emptyState = document.getElementById("empty-state");
@@ -93,3 +93,4 @@ searchInput.addEventListener("input", (e) => {
 
 renderTabs();
 render();
+updateCartBadge();
