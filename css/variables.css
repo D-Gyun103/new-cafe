@@ -152,7 +152,7 @@ button {
 .page-header__actions {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-1);
 }
 
 .back-link {
@@ -175,14 +175,17 @@ button {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
   font-weight: 700;
   color: var(--color-primary-dark);
-  transition: color var(--transition-fast);
+  transition: color var(--transition-fast), background var(--transition-fast);
 }
 
 .cart-link:hover {
   color: var(--color-primary);
+  background: var(--color-cream);
 }
 
 .cart-link__count {
