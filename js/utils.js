@@ -3,6 +3,10 @@
 import { CATEGORIES, INITIAL_MENUS } from "./data.js";
 
 const MENUS_KEY = "cafe_menus";
+const MENUS_VERSION_KEY = "cafe_menus_version";
+// INITIAL_MENUS의 기본값(특히 image 필드 형식)을 바꿀 때마다 올린다.
+// 버전이 다르면 캐시된 localStorage 값을 버리고 시드로 다시 초기화한다.
+const MENUS_VERSION = "2";
 const CART_KEY = "cafe_cart";
 
 /* ---------- 포맷 ---------- */
@@ -15,15 +19,21 @@ export function getCategoryName(categoryId) {
   return CATEGORIES.find((c) => c.id === categoryId)?.name ?? categoryId;
 }
 
-const PLACEHOLDER_IMAGE =
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Caffe_Latte_cup.jpg/960px-Caffe_Latte_cup.jpg";
+// utils.js 자신의 위치(import.meta.url) 기준으로 images/menu/를 가리킨다.
+// 어떤 깊이의 페이지에서 import하든 항상 올바른 경로로 계산되므로,
+// 페이지마다 상대 경로를 따로 계산할 필요가 없다.
+const IMAGES_BASE_URL = new URL("../images/menu/", import.meta.url);
 
 /**
  * 메뉴 이미지의 실제 src를 계산한다.
- * 메뉴의 image 필드는 항상 외부 이미지 URL이며, 값이 없으면 기본 이미지로 대체한다.
+ * - 절대 URL(http...)이면 그대로 사용
+ * - 값이 없으면 기본 이미지로 대체
+ * - 그 외에는 images/menu/ 폴더의 로컬 파일명으로 간주한다
  */
 export function resolveImageSrc(image) {
-  return image || PLACEHOLDER_IMAGE;
+  if (!image) return new URL("placeholder.jpg", IMAGES_BASE_URL).href;
+  if (/^https?:\/\//.test(image)) return image;
+  return new URL(image, IMAGES_BASE_URL).href;
 }
 
 /* ---------- 공통 ---------- */
@@ -53,32 +63,22 @@ export function showToast(message, duration = 2200) {
 
 /* ---------- 메뉴 스토리지 ---------- */
 
-// image 값이 외부 URL이 아니면(이전 버전의 이모지/로컬 파일명 캐시) 최신 시드 이미지로 교체한다
-function migrateImages(menus) {
-  let changed = false;
-  const migrated = menus.map((menu) => {
-    if (typeof menu.image === "string" && menu.image.startsWith("http")) return menu;
-    const seed = INITIAL_MENUS.find((seedMenu) => seedMenu.id === menu.id);
-    changed = true;
-    return { ...menu, image: seed ? seed.image : menu.image };
-  });
-  return { migrated, changed };
+function seedMenus() {
+  localStorage.setItem(MENUS_KEY, JSON.stringify(INITIAL_MENUS));
+  localStorage.setItem(MENUS_VERSION_KEY, MENUS_VERSION);
+  return structuredClone(INITIAL_MENUS);
 }
 
 function readMenus() {
   const raw = localStorage.getItem(MENUS_KEY);
-  if (!raw) {
-    localStorage.setItem(MENUS_KEY, JSON.stringify(INITIAL_MENUS));
-    return structuredClone(INITIAL_MENUS);
+  const version = localStorage.getItem(MENUS_VERSION_KEY);
+  if (!raw || version !== MENUS_VERSION) {
+    return seedMenus();
   }
   try {
-    const parsed = JSON.parse(raw);
-    const { migrated, changed } = migrateImages(parsed);
-    if (changed) localStorage.setItem(MENUS_KEY, JSON.stringify(migrated));
-    return migrated;
+    return JSON.parse(raw);
   } catch {
-    localStorage.setItem(MENUS_KEY, JSON.stringify(INITIAL_MENUS));
-    return structuredClone(INITIAL_MENUS);
+    return seedMenus();
   }
 }
 

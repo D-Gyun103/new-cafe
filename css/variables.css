@@ -256,13 +256,15 @@ button {
 }
 
 .badge-best {
-  background: var(--color-warning-bg);
-  color: var(--color-warning);
+  background: var(--color-warning);
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
 }
 
 .badge-new {
-  background: var(--color-success-bg);
-  color: var(--color-success);
+  background: var(--color-success);
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
 }
 
 .badge-soldout {
