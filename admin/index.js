@@ -1,6 +1,7 @@
 import {
   getMenus,
   getOrders,
+  getFeedbacks,
   formatPrice,
   formatDateTime,
   resolveImageSrc,
@@ -24,7 +25,9 @@ function statCardHTML(label, value) {
 function renderStats() {
   const menus = getMenus();
   const orders = getOrders();
+  const feedbacks = getFeedbacks();
   const soldOutCount = menus.filter((menu) => menu.soldOut).length;
+  const pendingFeedbackCount = feedbacks.filter((feedback) => !feedback.reply).length;
   const revenue = orders
     .filter((order) => (order.status ?? "received") !== "canceled")
     .reduce((sum, order) => sum + order.totalPrice, 0);
@@ -34,6 +37,7 @@ function renderStats() {
     statCardHTML("품절 메뉴", `${soldOutCount}개`),
     statCardHTML("전체 주문", `${orders.length}건`),
     statCardHTML("총 매출", formatPrice(revenue)),
+    statCardHTML("미답변 건의", `${pendingFeedbackCount}건`),
   ].join("");
 }
 

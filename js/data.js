@@ -19,6 +19,11 @@ export const ORDER_STATUSES = [
   { id: "canceled", name: "취소" },
 ];
 
+export const FEEDBACK_CATEGORIES = [
+  { id: "complaint", name: "불편사항" },
+  { id: "suggestion", name: "건의사항" },
+];
+
 // 최초 1회 localStorage 시딩에 사용되는 기본 메뉴 데이터
 export const INITIAL_MENUS = [
   {

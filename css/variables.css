@@ -282,6 +282,19 @@ button {
   }
 }
 
+/* ===== 페이지 헤딩 (마이페이지/건의함 등 공용) ===== */
+.page-heading h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: var(--color-primary-dark);
+  letter-spacing: -0.01em;
+}
+
+.page-heading p {
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+}
+
 /* ===== 메뉴 카드 (메뉴 목록/홈 공용) ===== */
 .menu-card {
   display: flex;

@@ -1,6 +1,6 @@
 // ===== 카페 앱 - 공통 유틸리티 (스토리지, 카트, 포맷 등) =====
 
-import { CATEGORIES, INITIAL_MENUS, ORDER_STATUSES } from "./data.js";
+import { CATEGORIES, INITIAL_MENUS, ORDER_STATUSES, FEEDBACK_CATEGORIES } from "./data.js";
 
 const MENUS_KEY = "cafe_menus";
 const MENUS_VERSION_KEY = "cafe_menus_version";
@@ -10,6 +10,7 @@ const MENUS_VERSION = "2";
 const CART_KEY = "cafe_cart";
 const ORDERS_KEY = "cafe_orders";
 const PROFILE_KEY = "cafe_profile";
+const FEEDBACKS_KEY = "cafe_feedbacks";
 
 const DEFAULT_PROFILE = {
   name: "이서연",
@@ -35,6 +36,10 @@ export function getCategoryName(categoryId) {
 
 export function getOrderStatusName(statusId) {
   return ORDER_STATUSES.find((s) => s.id === statusId)?.name ?? statusId;
+}
+
+export function getFeedbackCategoryName(categoryId) {
+  return FEEDBACK_CATEGORIES.find((c) => c.id === categoryId)?.name ?? categoryId;
 }
 
 const ORDER_STATUS_BADGE_CLASS = {
@@ -343,4 +348,62 @@ export function resetCustomerData() {
   localStorage.removeItem(PROFILE_KEY);
   localStorage.removeItem(CART_KEY);
   localStorage.removeItem(ORDERS_KEY);
+}
+
+/* ---------- 건의함 (불편/건의사항) ----------
+ * 접수된 내용은 관리자만 열람·삭제·답변·수정할 수 있다.
+ * 고객 화면에는 제출 폼만 제공하고, 접수된 목록/답변을 보여주는 화면은 두지 않는다.
+ */
+
+function readFeedbacks() {
+  const raw = localStorage.getItem(FEEDBACKS_KEY);
+  if (!raw) return [];
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+
+function writeFeedbacks(feedbacks) {
+  localStorage.setItem(FEEDBACKS_KEY, JSON.stringify(feedbacks));
+}
+
+export function getFeedbacks() {
+  return readFeedbacks().sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+export function getFeedbackById(id) {
+  return readFeedbacks().find((feedback) => feedback.id === id) ?? null;
+}
+
+export function createFeedback({ category, title, content }) {
+  const profile = getProfile();
+  const feedback = {
+    id: generateId("feedback"),
+    category,
+    title,
+    content,
+    authorName: profile.name,
+    authorEmail: profile.email,
+    reply: null,
+    repliedAt: null,
+    createdAt: new Date().toISOString(),
+  };
+  writeFeedbacks([...readFeedbacks(), feedback]);
+  return feedback;
+}
+
+export function replyToFeedback(id, reply) {
+  const feedbacks = readFeedbacks();
+  const feedback = feedbacks.find((f) => f.id === id);
+  if (!feedback) return null;
+  feedback.reply = reply;
+  feedback.repliedAt = new Date().toISOString();
+  writeFeedbacks(feedbacks);
+  return feedback;
+}
+
+export function deleteFeedback(id) {
+  writeFeedbacks(readFeedbacks().filter((feedback) => feedback.id !== id));
 }

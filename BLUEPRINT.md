@@ -39,6 +39,12 @@ cafe-app/
 │       ├── detail.css
 │       └── detail.js                   
 │
+├── 👤 고객 - 건의함
+│   └── feedback/
+│       ├── index.html                # 불편/건의사항 제출 폼
+│       ├── index.css
+│       └── index.js
+│
 ├── 🔴 관리자/사장
 │   └── admin/
 │       ├── index.html                # 대시보드
@@ -59,11 +65,19 @@ cafe-app/
 │       │   ├── edit.css
 │       │   └── edit.js
 │       │
-│       └── orders/
-│           ├── list.html             # 주문 목록
+│       ├── orders/
+│       │   ├── list.html             # 주문 목록
+│       │   ├── list.css
+│       │   ├── list.js
+│       │   ├── detail.html           # 주문 상세
+│       │   ├── detail.css
+│       │   └── detail.js
+│       │
+│       └── feedback/
+│           ├── list.html             # 건의함 목록 (열람/삭제)
 │           ├── list.css
 │           ├── list.js
-│           ├── detail.html           # 주문 상세
+│           ├── detail.html           # 건의사항 상세 (답변/수정/삭제)
 │           ├── detail.css
 │           └── detail.js
 │
@@ -81,8 +95,8 @@ cafe-app/
 
 | 역할 | 경로 | 주요 기능 |
 |------|------|-----------|
-| **고객** | `/`, `/menus/`, `/my/`, `/basket/`, `/orders/` | 메인, 메뉴 조회, 마이페이지, 장바구니, 주문 내역 |
-| **관리자/사장** | `/admin/`, `/admin/menus/`, `/admin/orders/` | 대시보드, 메뉴 CRUD, 주문 관리 |
+| **고객** | `/`, `/menus/`, `/my/`, `/basket/`, `/orders/`, `/feedback/` | 메인, 메뉴 조회, 마이페이지, 장바구니, 주문 내역, 불편/건의사항 제출 |
+| **관리자/사장** | `/admin/`, `/admin/menus/`, `/admin/orders/`, `/admin/feedback/` | 대시보드, 메뉴 CRUD, 주문 관리, 건의함 열람·답변·수정·삭제 |
 
 ## 🎨 디자인
 
@@ -171,3 +185,15 @@ cafe-app/
 - [x] `admin/orders/detail.html` — 주문 상세
 - [x] `admin/orders/detail.css`
 - [x] `admin/orders/detail.js`
+
+### 9단계: 건의함 (불편/건의사항 접수 및 관리)
+
+- [x] `feedback/index.html` — 고객용 제출 폼 (열람 없이 제출만 가능)
+- [x] `feedback/index.css`
+- [x] `feedback/index.js`
+- [x] `admin/feedback/list.html` — 건의함 목록 (카테고리/답변상태 필터, 삭제)
+- [x] `admin/feedback/list.css`
+- [x] `admin/feedback/list.js`
+- [x] `admin/feedback/detail.html` — 상세 (답변 등록/수정, 삭제)
+- [x] `admin/feedback/detail.css`
+- [x] `admin/feedback/detail.js`

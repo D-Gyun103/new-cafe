@@ -1,0 +1,16 @@
+.feedback-page {
+  padding: var(--space-6) var(--space-5) var(--space-8);
+  max-width: 560px;
+}
+
+.feedback-page .page-heading {
+  margin-bottom: var(--space-6);
+}
+
+.feedback-form {
+  padding: var(--space-6);
+}
+
+.feedback-form textarea {
+  min-height: 180px;
+}
