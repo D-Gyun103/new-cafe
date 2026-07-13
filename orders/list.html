@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>주문 내역 | 카페</title>
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="list.css" />
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="../menus/list.html">← 메뉴로</a>
+    <div class="page-header__title">🧾 주문 내역</div>
+    <div class="page-header__actions"></div>
+  </header>
+
+  <main class="container orders">
+    <div class="orders__list" id="orders-root"></div>
+
+    <div class="empty-state" id="empty-state" hidden>
+      <div class="empty-state__icon">🧾</div>
+      <p>아직 주문 내역이 없습니다.</p>
+      <a class="btn btn-primary btn-sm" href="../menus/list.html">메뉴 보러 가기</a>
+    </div>
+  </main>
+
+  <script type="module" src="list.js"></script>
+</body>
+</html>

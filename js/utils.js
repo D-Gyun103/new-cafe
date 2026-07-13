@@ -8,11 +8,18 @@ const MENUS_VERSION_KEY = "cafe_menus_version";
 // 버전이 다르면 캐시된 localStorage 값을 버리고 시드로 다시 초기화한다.
 const MENUS_VERSION = "2";
 const CART_KEY = "cafe_cart";
+const ORDERS_KEY = "cafe_orders";
 
 /* ---------- 포맷 ---------- */
 
 export function formatPrice(price) {
   return `${Number(price).toLocaleString("ko-KR")}원`;
+}
+
+export function formatDateTime(iso) {
+  const d = new Date(iso);
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
 export function getCategoryName(categoryId) {
@@ -188,10 +195,6 @@ export function getCartCount() {
   return readCart().reduce((sum, item) => sum + item.quantity, 0);
 }
 
-export function clearCart() {
-  writeCart([]);
-}
-
 /**
  * id="cart-count" 뱃지가 있는 페이지에서 호출하면
  * 장바구니 담긴 수량으로 갱신해준다. 뱃지가 없으면 아무 동작 안 함.
@@ -202,4 +205,65 @@ export function updateCartBadge() {
   const count = getCartCount();
   badge.textContent = count;
   badge.hidden = count === 0;
+}
+
+/* ---------- 주문 ---------- */
+
+function readOrders() {
+  const raw = localStorage.getItem(ORDERS_KEY);
+  if (!raw) return [];
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+
+function writeOrders(orders) {
+  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+}
+
+export function getOrders() {
+  return readOrders().sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+export function getOrderById(id) {
+  return readOrders().find((order) => order.id === id) ?? null;
+}
+
+/**
+ * 현재 장바구니 내용을 그대로 주문으로 확정하고 장바구니는 비운다.
+ * 장바구니가 비어 있으면 아무 것도 하지 않고 null을 반환한다.
+ */
+export function createOrder() {
+  const cart = readCart();
+  const items = cart
+    .map((cartItem) => {
+      const menu = getMenuById(cartItem.menuId);
+      if (!menu) return null;
+      return {
+        menuId: menu.id,
+        name: menu.name,
+        image: menu.image,
+        price: menu.price,
+        temperature: cartItem.temperature,
+        quantity: cartItem.quantity,
+        subtotal: menu.price * cartItem.quantity,
+      };
+    })
+    .filter(Boolean);
+
+  if (items.length === 0) return null;
+
+  const order = {
+    id: generateId("order"),
+    items,
+    totalCount: items.reduce((sum, item) => sum + item.quantity, 0),
+    totalPrice: items.reduce((sum, item) => sum + item.subtotal, 0),
+    createdAt: new Date().toISOString(),
+  };
+
+  writeOrders([...readOrders(), order]);
+  writeCart([]);
+  return order;
 }

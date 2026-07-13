@@ -3,7 +3,7 @@ import {
   getMenuById,
   updateCartItemQty,
   removeFromCart,
-  clearCart,
+  createOrder,
   formatPrice,
   resolveImageSrc,
   showToast,
@@ -88,9 +88,13 @@ root.addEventListener("click", (e) => {
 });
 
 orderBtn.addEventListener("click", () => {
-  clearCart();
+  const order = createOrder();
+  if (!order) return;
   showToast("주문이 완료되었습니다.");
-  render();
+  updateCartBadge();
+  setTimeout(() => {
+    window.location.href = `../orders/detail.html?id=${order.id}`;
+  }, 700);
 });
 
 render();
