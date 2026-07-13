@@ -1,18 +1,31 @@
 import { CATEGORIES } from "../js/data.js";
-import { getMenus, formatPrice, resolveImageSrc, updateCartBadge } from "../js/utils.js";
+import {
+  getMenus,
+  formatPrice,
+  resolveImageSrc,
+  updateCartBadge,
+  getQueryParam,
+} from "../js/utils.js";
 
 const root = document.getElementById("menu-root");
 const emptyState = document.getElementById("empty-state");
 const searchInput = document.getElementById("search-input");
 const tabsEl = document.getElementById("category-tabs");
 
-let activeCategory = "all";
+const requestedCategory = getQueryParam("category");
+let activeCategory = CATEGORIES.some((c) => c.id === requestedCategory)
+  ? requestedCategory
+  : "all";
 let keyword = "";
 
 function renderTabs() {
+  tabsEl.querySelector('[data-category="all"]').classList.toggle(
+    "is-active",
+    activeCategory === "all"
+  );
   CATEGORIES.forEach((category) => {
     const btn = document.createElement("button");
-    btn.className = "tab";
+    btn.className = "tab" + (category.id === activeCategory ? " is-active" : "");
     btn.type = "button";
     btn.dataset.category = category.id;
     btn.textContent = category.name;

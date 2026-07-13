@@ -1,6 +1,8 @@
+import { CATEGORIES } from "./js/data.js";
 import { getMenus, formatPrice, resolveImageSrc, updateCartBadge } from "./js/utils.js";
 
 const bestRoot = document.getElementById("best-root");
+const categoryRoot = document.getElementById("category-root");
 
 function menuCardHTML(menu) {
   const badges = [];
@@ -25,12 +27,28 @@ function menuCardHTML(menu) {
   `;
 }
 
-function render() {
+function renderBestMenus() {
   const bestMenus = getMenus()
     .filter((menu) => menu.badge === "BEST" && !menu.soldOut)
     .slice(0, 4);
   bestRoot.innerHTML = bestMenus.map(menuCardHTML).join("");
 }
 
-render();
+function renderCategoryTiles() {
+  const menus = getMenus();
+  categoryRoot.innerHTML = CATEGORIES.map((category) => {
+    const sample =
+      menus.find((menu) => menu.category === category.id && !menu.soldOut) ??
+      menus.find((menu) => menu.category === category.id);
+    return `
+      <a class="category-tile" href="menus/list.html?category=${category.id}">
+        <img src="${resolveImageSrc(sample?.image)}" alt="${category.name}" loading="lazy" />
+        <span class="category-tile__label">${category.name}</span>
+      </a>
+    `;
+  }).join("");
+}
+
+renderBestMenus();
+renderCategoryTiles();
 updateCartBadge();

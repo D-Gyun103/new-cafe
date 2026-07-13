@@ -11,6 +11,7 @@
   <header class="page-header">
     <div class="page-header__title">☕ 카페</div>
     <div class="page-header__actions">
+      <a class="cart-link" href="my/index.html">👤 마이페이지</a>
       <a class="cart-link" href="orders/list.html">🧾 주문내역</a>
       <a class="cart-link" href="basket/list.html">
         🧺 장바구니
@@ -19,37 +20,101 @@
     </div>
   </header>
 
-  <main class="container home">
-    <section class="hero">
-      <p class="hero__eyebrow">따뜻한 브라운 톤의 작은 공간</p>
-      <h1 class="hero__title">오늘 하루, 커피 한 잔의 여유</h1>
+  <section class="hero">
+    <div class="hero__media">
+      <img src="images/menu/menu-2.jpg" alt="" loading="eager" />
+    </div>
+    <div class="hero__overlay"></div>
+    <div class="hero__content container">
+      <p class="eyebrow">따뜻한 브라운 톤의 작은 공간</p>
+      <h1 class="hero__title">오늘 하루,<br />커피 한 잔의 여유</h1>
       <p class="hero__desc">직접 로스팅한 원두와 정성으로 만든 디저트를 만나보세요.</p>
-      <a class="btn btn-primary" href="menus/list.html">메뉴 보러 가기</a>
-    </section>
+      <div class="hero__actions">
+        <a class="btn btn-primary" href="menus/list.html">메뉴 보러 가기</a>
+        <a class="btn btn-outline" href="#info">매장 안내</a>
+      </div>
+    </div>
+  </section>
 
-    <section class="quick-links">
-      <a class="quick-link" href="menus/list.html">
-        <span class="quick-link__icon">☕</span>
-        <span class="quick-link__label">메뉴</span>
-      </a>
-      <a class="quick-link" href="basket/list.html">
-        <span class="quick-link__icon">🧺</span>
-        <span class="quick-link__label">장바구니</span>
-      </a>
-      <a class="quick-link" href="orders/list.html">
-        <span class="quick-link__icon">🧾</span>
-        <span class="quick-link__label">주문내역</span>
-      </a>
+  <main class="home">
+    <section class="quick-links-section">
+      <div class="container">
+        <div class="quick-links">
+          <a class="quick-link" href="menus/list.html">
+            <span class="quick-link__index">01</span>
+            <strong class="quick-link__title">메뉴</strong>
+            <p class="quick-link__desc">커피, 논커피, 티, 디저트를 둘러보세요.</p>
+          </a>
+          <a class="quick-link" href="basket/list.html">
+            <span class="quick-link__index">02</span>
+            <strong class="quick-link__title">장바구니</strong>
+            <p class="quick-link__desc">담은 메뉴를 확인하고 수량을 조절하세요.</p>
+          </a>
+          <a class="quick-link" href="orders/list.html">
+            <span class="quick-link__index">03</span>
+            <strong class="quick-link__title">주문내역</strong>
+            <p class="quick-link__desc">지난 주문과 결제 내역을 확인하세요.</p>
+          </a>
+        </div>
+      </div>
     </section>
 
     <section class="home-section">
-      <div class="home-section__header">
-        <h2>지금 인기있는 메뉴</h2>
-        <a class="home-section__more" href="menus/list.html">전체보기 →</a>
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Recommended</p>
+            <h2>지금 인기있는 메뉴</h2>
+          </div>
+          <a class="home-section__more" href="menus/list.html">전체보기 →</a>
+        </div>
+        <div class="home-section__grid" id="best-root"></div>
       </div>
-      <div class="home-section__grid" id="best-root"></div>
+    </section>
+
+    <section class="category-showcase">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Category</p>
+            <h2>카테고리별로 둘러보기</h2>
+          </div>
+        </div>
+        <div class="category-showcase__grid" id="category-root"></div>
+      </div>
+    </section>
+
+    <section class="info" id="info">
+      <div class="container info__grid">
+        <div class="info__card">
+          <h3>영업시간</h3>
+          <ul>
+            <li><span>평일</span><span>08:00 - 22:00</span></li>
+            <li><span>주말·공휴일</span><span>09:00 - 23:00</span></li>
+            <li><span>라스트오더</span><span>마감 30분 전</span></li>
+          </ul>
+        </div>
+        <div class="info__card">
+          <h3>오시는 길</h3>
+          <p>서울특별시 강남구 카페로 12길 34</p>
+          <p>2호선 강남역 3번 출구 도보 5분</p>
+        </div>
+        <div class="info__card">
+          <h3>문의</h3>
+          <p>0507-1234-5678</p>
+          <p>매장 전화 문의는 영업시간 내에만 가능합니다.</p>
+        </div>
+      </div>
     </section>
   </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__brand">☕ 카페</p>
+      <p class="site-footer__addr">서울특별시 강남구 카페로 12길 34 · 사업자등록번호 000-00-00000</p>
+      <p class="site-footer__copyright">© 2026 카페. All rights reserved.</p>
+    </div>
+  </footer>
 
   <script type="module" src="index.js"></script>
 </body>

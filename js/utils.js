@@ -9,6 +9,13 @@ const MENUS_VERSION_KEY = "cafe_menus_version";
 const MENUS_VERSION = "2";
 const CART_KEY = "cafe_cart";
 const ORDERS_KEY = "cafe_orders";
+const PROFILE_KEY = "cafe_profile";
+
+const DEFAULT_PROFILE = {
+  name: "이서연",
+  email: "seoyeon@example.com",
+  joinedAt: "2026.02.14",
+};
 
 /* ---------- 포맷 ---------- */
 
@@ -195,6 +202,13 @@ export function getCartCount() {
   return readCart().reduce((sum, item) => sum + item.quantity, 0);
 }
 
+export function getCartTotal() {
+  return readCart().reduce((sum, item) => {
+    const menu = getMenuById(item.menuId);
+    return menu ? sum + menu.price * item.quantity : sum;
+  }, 0);
+}
+
 /**
  * id="cart-count" 뱃지가 있는 페이지에서 호출하면
  * 장바구니 담긴 수량으로 갱신해준다. 뱃지가 없으면 아무 동작 안 함.
@@ -266,4 +280,38 @@ export function createOrder() {
   writeOrders([...readOrders(), order]);
   writeCart([]);
   return order;
+}
+
+/* ---------- 프로필 (마이페이지) ---------- */
+
+export function getProfile() {
+  const raw = localStorage.getItem(PROFILE_KEY);
+  if (!raw) {
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(DEFAULT_PROFILE));
+    return { ...DEFAULT_PROFILE };
+  }
+  try {
+    const profile = JSON.parse(raw);
+    if (!profile?.name || !profile?.email) throw new Error("invalid profile");
+    return profile;
+  } catch {
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(DEFAULT_PROFILE));
+    return { ...DEFAULT_PROFILE };
+  }
+}
+
+export function saveProfile(data) {
+  const profile = { ...getProfile(), ...data };
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+  return profile;
+}
+
+/**
+ * 프로필/장바구니/주문 내역을 모두 삭제한다. (회원 탈퇴)
+ * 메뉴 데이터(cafe_menus)는 앱 자체 데이터이므로 건드리지 않는다.
+ */
+export function resetCustomerData() {
+  localStorage.removeItem(PROFILE_KEY);
+  localStorage.removeItem(CART_KEY);
+  localStorage.removeItem(ORDERS_KEY);
 }

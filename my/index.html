@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>마이페이지 | 카페</title>
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="../index.html">← 홈</a>
+    <div class="page-header__title">👤 마이페이지</div>
+    <div class="page-header__actions">
+      <a class="cart-link" href="../basket/list.html">
+        🧺 장바구니
+        <span class="cart-link__count" id="cart-count" hidden>0</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="container my-page">
+    <section class="page-heading">
+      <p class="eyebrow">My Cafe</p>
+      <h1>마이페이지</h1>
+      <p>내 정보와 최근 활동을 한눈에 확인하세요.</p>
+    </section>
+
+    <section class="profile-card">
+      <div class="profile-avatar" id="profile-avatar" aria-hidden="true"></div>
+      <div class="profile-info">
+        <div id="profile-view">
+          <div class="profile-name-row">
+            <h2 id="profile-name"></h2>
+            <span class="badge badge-category">단골 회원</span>
+            <button type="button" id="edit-profile-btn" class="edit-btn">정보 수정</button>
+          </div>
+          <dl class="profile-meta">
+            <div>
+              <dt>이메일</dt>
+              <dd id="profile-email"></dd>
+            </div>
+            <div>
+              <dt>가입일</dt>
+              <dd id="profile-joined"></dd>
+            </div>
+          </dl>
+        </div>
+
+        <form id="profile-edit-form" class="profile-edit-form" hidden>
+          <div class="field">
+            <label for="name-input">이름</label>
+            <input type="text" id="name-input" name="name" required />
+          </div>
+          <div class="field">
+            <label for="email-input">이메일</label>
+            <input type="email" id="email-input" name="email" required />
+          </div>
+          <div class="form-actions">
+            <button type="button" id="cancel-edit-btn" class="btn btn-outline btn-sm">취소</button>
+            <button type="submit" class="btn btn-primary btn-sm">저장</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="summary-grid" aria-label="내 활동 요약">
+      <article class="summary-card">
+        <span>장바구니 담긴 메뉴</span>
+        <strong id="basket-count">0개</strong>
+      </article>
+      <article class="summary-card">
+        <span>장바구니 예상 금액</span>
+        <strong id="basket-total">0원</strong>
+      </article>
+      <article class="summary-card">
+        <span>전체 주문</span>
+        <strong id="order-count">0건</strong>
+      </article>
+    </section>
+
+    <section aria-label="바로가기">
+      <div class="quick-links">
+        <a class="quick-link" href="../menus/list.html">
+          <span class="quick-link__index">01</span>
+          <strong class="quick-link__title">메뉴 보기</strong>
+          <p class="quick-link__desc">커피, 논커피, 티, 디저트를 둘러보세요.</p>
+        </a>
+        <a class="quick-link" href="../basket/list.html">
+          <span class="quick-link__index">02</span>
+          <strong class="quick-link__title">장바구니</strong>
+          <p class="quick-link__desc">담은 메뉴를 확인하고 수량을 조절하세요.</p>
+        </a>
+        <a class="quick-link" href="../orders/list.html">
+          <span class="quick-link__index">03</span>
+          <strong class="quick-link__title">주문 내역</strong>
+          <p class="quick-link__desc">지난 주문과 결제 내역을 확인하세요.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="account-actions">
+      <div>
+        <h2>계정 관리</h2>
+        <p>탈퇴 시 프로필 정보와 장바구니, 주문 내역이 모두 삭제되며 되돌릴 수 없습니다.</p>
+      </div>
+      <button type="button" id="withdraw-btn" class="btn btn-danger btn-sm">회원 탈퇴</button>
+    </section>
+  </main>
+
+  <script type="module" src="index.js"></script>
+</body>
+</html>
