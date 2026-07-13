@@ -70,9 +70,11 @@ cafe-app/
 ├── 📦 공유 자원
 │   ├── css/
 │   │   └── variables.css             # CSS 변수 (전역)
-│   └── js/
-│       ├── data.js                   # 메뉴/카테고리 데이터
-│       └── utils.js                  # 공통 유틸리티
+│   ├── js/
+│   │   ├── data.js                   # 메뉴/카테고리 데이터
+│   │   └── utils.js                  # 공통 유틸리티
+│   └── images/
+│       └── menu/                     # 메뉴 사진 (menu-1.jpg ~ menu-16.jpg, placeholder.jpg)
 ```
 
 ## 👥 역할별 기능
@@ -105,6 +107,7 @@ cafe-app/
 - [x] `css/variables.css` — 전역 CSS 변수, 리셋
 - [x] `js/data.js` — 메뉴/카테고리 데이터
 - [x] `js/utils.js` — 공통 유틸리티 (카트, 포맷 등)
+- [x] `images/menu/` — 메뉴 사진 리소스
 
 ### 2단계: 관리자 - 메뉴 관리 시스템
 

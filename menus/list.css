@@ -56,30 +56,23 @@
 .tabs {
   display: flex;
   align-items: center;
-  gap: var(--space-5);
+  gap: var(--space-1);
   flex-wrap: wrap;
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--space-1);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-full);
 }
 
 .tab {
   position: relative;
-  padding: var(--space-2) 0;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--color-text-muted);
-  transition: color var(--transition-fast);
-}
-
-.tab::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 2px;
-  border-radius: var(--radius-full);
-  background: var(--color-primary);
-  transform: scaleX(0);
-  transition: transform var(--transition-fast);
+  transition: color var(--transition-fast), background var(--transition-fast);
 }
 
 .tab:hover {
@@ -87,12 +80,9 @@
 }
 
 .tab.is-active {
-  color: var(--color-primary-dark);
+  color: #fff;
+  background: var(--color-primary);
   font-weight: 700;
-}
-
-.tab.is-active::after {
-  transform: scaleX(1);
 }
 
 /* ===== 카테고리 섹션 ===== */
