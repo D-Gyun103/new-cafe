@@ -9,21 +9,6 @@
   margin-bottom: var(--space-5);
 }
 
-.admin-menus__toolbar input[type="search"] {
-  width: 100%;
-  max-width: 320px;
-  padding: var(--space-3) var(--space-4);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-full);
-  background: var(--color-surface);
-  font-size: var(--font-size-sm);
-}
-
-.admin-menus__toolbar input[type="search"]:focus {
-  outline: none;
-  border-color: var(--color-primary-light);
-}
-
 .tabs {
   display: flex;
   gap: var(--space-2);

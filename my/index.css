@@ -132,7 +132,7 @@
   justify-content: space-between;
   gap: var(--space-4);
   padding: var(--space-5);
-  background: var(--color-danger-bg);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
 }
@@ -147,6 +147,126 @@
 .account-actions p {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
+}
+
+/* ===== 탭 (내 정보 / 건의·불편 내역) ===== */
+.my-page__tabs {
+  margin-bottom: var(--space-6);
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--space-1);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-full);
+}
+
+.tab {
+  position: relative;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.tab:hover {
+  color: var(--color-primary);
+}
+
+.tab.is-active {
+  color: #fff;
+  background: var(--color-primary);
+  font-weight: 700;
+}
+
+.tab-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.tab-panel[hidden] {
+  display: none;
+}
+
+/* ===== 건의·불편 내역 ===== */
+.my-feedback-count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.my-feedback-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.my-feedback-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.my-feedback-item__top {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.my-feedback-item__date {
+  margin-left: auto;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.my-feedback-item__title {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.my-feedback-item__content {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.my-feedback-item__pending {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-warning);
+}
+
+.my-feedback-item__reply {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-md);
+}
+
+.my-feedback-item__reply-label {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.my-feedback-item__reply-content {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  line-height: 1.6;
+  white-space: pre-wrap;
 }
 
 /* ===== 반응형 ===== */

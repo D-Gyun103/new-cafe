@@ -64,6 +64,22 @@
   color: var(--color-primary-dark);
 }
 
+.basket-item__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.basket-item__badges:empty {
+  display: none;
+}
+
+.basket-item__request {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
 .basket-item__remove {
   flex-shrink: 0;
   width: 24px;

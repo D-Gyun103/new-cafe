@@ -23,13 +23,34 @@
   grid-column: 2;
 }
 
-/* ===== 히어로 ===== */
+/* ===== 히어로 (자동 전환 캐러셀) ===== */
 .hero {
   position: relative;
   min-height: 520px;
+  overflow: hidden;
+}
+
+.hero__slide {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
-  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.7s ease;
+}
+
+.hero__slide.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hero__slide--beans {
+  background: linear-gradient(120deg, var(--color-primary-dark), var(--color-primary) 55%, var(--color-accent));
+}
+
+.hero__slide--signature {
+  background: linear-gradient(240deg, var(--color-primary-dark), var(--color-primary) 55%, var(--color-accent));
 }
 
 .hero__media {
@@ -100,6 +121,130 @@
   border-color: #fff;
   background: rgba(255, 255, 255, 0.12);
   color: #fff;
+}
+
+.hero__beans {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+}
+
+.hero__bean {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 160px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(6px);
+}
+
+.hero__bean strong {
+  font-size: var(--font-size-md);
+  font-weight: 800;
+  color: var(--color-accent);
+}
+
+.hero__bean span {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+}
+
+a.hero__bean {
+  transition: background var(--transition-fast);
+}
+
+.hero__signature-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+}
+
+.hero__signature-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  padding-right: var(--space-5);
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(6px);
+  transition: background var(--transition-fast);
+}
+
+.hero__signature-card:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.hero__signature-card img {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.hero__signature-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hero__signature-card strong {
+  font-size: var(--font-size-md);
+  font-weight: 800;
+  color: #fff;
+}
+
+.hero__signature-card span {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+a.hero__bean:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.hero__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast), background var(--transition-fast);
+}
+
+.hero:hover .hero__nav {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hero__nav:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.hero__nav--prev {
+  left: var(--space-4);
+}
+
+.hero__nav--next {
+  right: var(--space-4);
 }
 
 /* ===== 바로가기 (히어로 위로 겹치는 넘버 카드) ===== */

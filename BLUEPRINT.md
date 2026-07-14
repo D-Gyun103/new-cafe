@@ -7,7 +7,15 @@ cafe-app/
 │
 ├── index.html                        # 메인 (고객)
 ├── index.css                         # 메인 페이지 스타일
-└── index.js                          # 메인 페이지 로직
+├── index.js                          # 메인 페이지 로직
+│
+├── 👤 고객 - 로그인/회원가입 (비회원도 주문 관련 기능은 이용 가능)
+│   ├── login.html
+│   ├── login.css
+│   ├── login.js
+│   ├── signup.html
+│   ├── signup.css
+│   └── signup.js
 │
 ├── 👤 고객 - 메뉴
 │   └── menus/
@@ -76,13 +84,18 @@ cafe-app/
 │       │   ├── detail.css
 │       │   └── detail.js
 │       │
-│       └── feedback/
-│           ├── list.html             # 건의함 목록 (열람/삭제)
+│       ├── feedback/
+│       │   ├── list.html             # 건의함 목록 (열람/삭제)
+│       │   ├── list.css
+│       │   ├── list.js
+│       │   ├── detail.html           # 건의사항 상세 (답변/수정/삭제)
+│       │   ├── detail.css
+│       │   └── detail.js
+│       │
+│       └── origins/
+│           ├── list.html             # 원두 품절 관리
 │           ├── list.css
-│           ├── list.js
-│           ├── detail.html           # 건의사항 상세 (답변/수정/삭제)
-│           ├── detail.css
-│           └── detail.js
+│           └── list.js
 │
 ├── 📦 공유 자원
 │   ├── css/
@@ -98,8 +111,9 @@ cafe-app/
 
 | 역할 | 경로 | 주요 기능 |
 |------|------|-----------|
-| **고객** | `/`, `/menus/`, `/my/`, `/basket/`, `/orders/`, `/feedback/` | 메인, 메뉴 조회, 마이페이지, 장바구니, 주문 내역, 불편/건의사항 제출 |
-| **관리자/사장** | `/admin/`, `/admin/menus/`, `/admin/orders/`, `/admin/feedback/` | 로그인 후 대시보드, 메뉴 CRUD, 주문 관리, 건의함 열람·답변·수정·삭제 |
+| **비회원** | `/`, `/menus/`, `/basket/`, `/orders/` | 메인, 메뉴 조회, 장바구니, 주문하기, 주문 내역 확인 (로그인 불필요) |
+| **회원(고객)** | 비회원 기능 전체 + `/my/`, `/feedback/` | 위 기능 + 마이페이지, 불편/건의사항 제출 (로그인 필요) |
+| **관리자/사장** | `/admin/`, `/admin/menus/`, `/admin/orders/`, `/admin/feedback/`, `/admin/origins/` | 로그인 후 대시보드, 메뉴 CRUD, 주문 관리, 건의함 열람·답변·수정·삭제, 원두 품절 관리 |
 
 ## 🎨 디자인
 
@@ -208,3 +222,20 @@ cafe-app/
 - [x] `admin/login.js`
 - [x] 홈 푸터에 "관리자 로그인" 진입점 추가
 - [x] 기존 관리자 페이지 전체(`admin/index.js`, `admin/menus/*`, `admin/orders/*`, `admin/feedback/*`)에 인증 가드 적용
+
+### 11단계: 고객 로그인 (회원가입/로그인, 비회원 접근 제한)
+
+- [x] `login.html` / `login.css` / `login.js` — 로그인 폼, 회원가입 링크, 로그인 후 원래 페이지로 복귀
+- [x] `signup.html` / `signup.css` / `signup.js` — 회원가입 폼 (아이디/비밀번호/이름/이메일)
+- [x] `js/utils.js` — 고객 계정 CRUD 및 세션 함수 (`registerCustomer`, `loginCustomer`, `logoutCustomer`, `getCurrentCustomer`, `requireCustomerAuth` 등)
+- [x] `my/index.js`, `feedback/index.js`에 `requireCustomerAuth` 가드 적용 (비회원은 로그인 페이지로 이동)
+- [x] 메뉴 조회·장바구니·주문하기·주문 내역은 비회원도 그대로 이용 가능 (가드 미적용)
+- [x] `my/index.html`에 로그아웃 버튼 추가, 회원 탈퇴 시 계정만 삭제(장바구니·주문 내역은 유지)
+
+### 12단계: 원두 품절 관리
+
+- [x] `admin/origins/list.html` / `list.css` / `list.js` — 원두별 품절 상태 토글
+- [x] `js/utils.js` — 원두 데이터를 localStorage 기반으로 전환 (`getBeanOrigins`, `setBeanOriginSoldOut`)
+- [x] `menus/detail.js` — 품절 원두는 선택 불가(비활성화)로 표시, 기본 선택값도 품절이 아닌 원두로 자동 지정
+- [x] `index.js` — 홈 히어로 "원두 소개" 슬라이드에도 품절 여부 반영
+- [x] 관리자 대시보드에 "원두 관리" 바로가기 추가

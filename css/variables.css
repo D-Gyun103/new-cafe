@@ -161,12 +161,115 @@ button {
 }
 
 .page-header__actions {
+  position: relative;
   grid-column: 3;
   justify-self: end;
   display: flex;
   align-items: center;
   gap: var(--space-1);
   flex-wrap: wrap;
+}
+
+/* ===== 모바일 내비게이션 (햄버거 토글 + 드롭다운) =====
+ * 데스크톱 폭에서는 .nav-menu가 그냥 가로로 펼쳐진 링크 목록이고 .nav-toggle은 숨겨진다.
+ * 좁은 화면에서만 .nav-toggle이 보이고, .nav-menu는 눌렀을 때만 펼쳐지는 드롭다운이 된다. */
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  transition: background var(--transition-fast);
+}
+
+.nav-toggle:hover {
+  background: var(--color-cream);
+}
+
+.nav-toggle__bar {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--color-primary-dark);
+  border-radius: var(--radius-full);
+  transition: background var(--transition-fast);
+}
+
+.nav-toggle__bar::before,
+.nav-toggle__bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 20px;
+  height: 2px;
+  background: var(--color-primary-dark);
+  border-radius: var(--radius-full);
+  transition: transform var(--transition-fast), top var(--transition-fast);
+}
+
+.nav-toggle__bar::before {
+  top: -6px;
+}
+
+.nav-toggle__bar::after {
+  top: 6px;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar {
+  background: transparent;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+@media (max-width: 860px) {
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  .nav-menu {
+    position: absolute;
+    top: calc(100% + var(--space-2));
+    right: 0;
+    z-index: 20;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-1);
+    min-width: 180px;
+    padding: var(--space-2);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .nav-menu.is-open {
+    display: flex;
+  }
+
+  .nav-menu .cart-link {
+    width: 100%;
+    border-radius: var(--radius-sm);
+  }
 }
 
 .back-link {
@@ -191,10 +294,14 @@ button {
   gap: var(--space-1);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-full);
-  font-size: var(--font-size-sm);
+  font-size: 0.9375rem;
   font-weight: 700;
   color: var(--color-primary-dark);
   transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.cart-link[hidden] {
+  display: none;
 }
 
 .cart-link:hover {
@@ -499,6 +606,7 @@ button {
 .order-item__meta {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-2);
 }
 
@@ -506,6 +614,12 @@ button {
   font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--color-text-muted);
+}
+
+.order-item__request {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  line-height: 1.5;
 }
 
 .order-detail__summary {
@@ -679,12 +793,22 @@ button {
   color: var(--color-primary-dark);
 }
 
+.badge-signature {
+  background: linear-gradient(100deg, var(--color-primary-dark), var(--color-primary));
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+}
+
 /* ===== 폼 요소 ===== */
 .field {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
   margin-bottom: var(--space-5);
+}
+
+.field[hidden] {
+  display: none;
 }
 
 .field label {
@@ -807,6 +931,153 @@ button {
 .toast.is-visible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+/* ===== 로그인/회원가입 카드 (공용) ===== */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--space-5);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  padding: var(--space-7) var(--space-6);
+}
+
+.login-card__heading {
+  margin-bottom: var(--space-6);
+}
+
+.login-card__heading h1 {
+  margin: var(--space-1) 0;
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--color-primary-dark);
+}
+
+.login-card__heading p {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+}
+
+.login-card__error {
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+.login-card__back {
+  display: block;
+  margin-top: var(--space-5);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.login-card__back:hover {
+  color: var(--color-primary);
+}
+
+.login-card__switch {
+  margin-top: var(--space-4);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.login-card__switch a {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.password-field {
+  position: relative;
+}
+
+.password-field input[type="password"],
+.password-field input[type="text"] {
+  padding-right: 56px;
+}
+
+.password-field__toggle {
+  position: absolute;
+  top: 50%;
+  right: var(--space-2);
+  transform: translateY(-50%);
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  background: none;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.password-field__toggle:hover {
+  color: var(--color-primary);
+}
+
+/* ===== 검색창 (공용, 고객/관리자 메뉴 목록에서 사용) ===== */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 320px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  transition: border-color var(--transition-fast);
+}
+
+.search-box:focus-within {
+  border-color: var(--color-primary-light);
+}
+
+.search-box__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+.search-box input[type="search"] {
+  flex: 1;
+  border: none;
+  background: none;
+  padding: var(--space-3) 0;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.search-box input[type="search"]:focus {
+  outline: none;
+}
+
+.search-box__btn {
+  flex-shrink: 0;
+  margin: 0 calc(var(--space-2) * -1) 0 0;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  transition: background var(--transition-fast);
+}
+
+.search-box__btn:hover {
+  background: var(--color-primary-dark);
 }
 
 /* ===== 스크롤바 (선택) ===== */

@@ -7,6 +7,13 @@ import {
   updateCartBadge,
   getOrderStatusName,
   getOrderStatusBadgeClass,
+  renderAuthNav,
+  initMobileNav,
+  getBeanOriginName,
+  getSizeOptionName,
+  getShotOptionName,
+  getWaterOptionName,
+  getIceOptionName,
 } from "../js/utils.js";
 
 const root = document.getElementById("order-detail-root");
@@ -26,8 +33,14 @@ function itemRowHTML(item) {
         </div>
         <div class="order-item__meta">
           ${item.temperature ? `<span class="badge badge-category">${item.temperature}</span>` : ""}
+          ${item.size ? `<span class="badge badge-category">${getSizeOptionName(item.size)}</span>` : ""}
+          ${item.origin ? `<span class="badge badge-category">${getBeanOriginName(item.origin)}</span>` : ""}
+          ${getShotOptionName(item.shotOption) ? `<span class="badge badge-category">${getShotOptionName(item.shotOption)}</span>` : ""}
+          ${getWaterOptionName(item.waterAmount) ? `<span class="badge badge-category">${getWaterOptionName(item.waterAmount)}</span>` : ""}
+          ${getIceOptionName(item.iceAmount) ? `<span class="badge badge-category">${getIceOptionName(item.iceAmount)}</span>` : ""}
           <span class="order-item__qty">${formatPrice(item.price)} · ${item.quantity}개</span>
         </div>
+        ${item.request ? `<p class="order-item__request">요청사항: ${item.request}</p>` : ""}
       </div>
     </div>
   `;
@@ -76,3 +89,5 @@ function render() {
 
 render();
 updateCartBadge();
+renderAuthNav("../login.html", "../index.html");
+initMobileNav();

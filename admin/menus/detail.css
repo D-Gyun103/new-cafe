@@ -88,3 +88,18 @@
   padding-top: var(--space-3);
   border-top: 1px solid var(--color-border);
 }
+
+@media (max-width: 480px) {
+  .menu-detail__top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .menu-detail__actions {
+    flex-direction: column;
+  }
+
+  .menu-detail__actions .btn {
+    width: 100%;
+  }
+}

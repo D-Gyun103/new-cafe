@@ -15,6 +15,7 @@ const grid = document.getElementById("menu-grid");
 const emptyState = document.getElementById("empty-state");
 const resultCount = document.getElementById("result-count");
 const searchInput = document.getElementById("search-input");
+const searchBtn = document.getElementById("search-btn");
 const tabsEl = document.getElementById("category-tabs");
 
 let activeCategory = "all";
@@ -36,6 +37,9 @@ function renderMenuCard(menu) {
   card.className = `menu-card glass-card${menu.soldOut ? " is-soldout" : ""}`;
 
   const badges = [];
+  if (menu.signature) {
+    badges.push(`<span class="badge badge-signature">시그니처</span>`);
+  }
   if (menu.badge) {
     const cls = menu.badge === "BEST" ? "badge-best" : "badge-new";
     badges.push(`<span class="badge ${cls}">${menu.badge}</span>`);
@@ -96,6 +100,19 @@ tabsEl.addEventListener("click", (e) => {
 searchInput.addEventListener("input", (e) => {
   keyword = e.target.value.trim();
   render();
+});
+
+searchBtn.addEventListener("click", () => {
+  keyword = searchInput.value.trim();
+  render();
+});
+
+searchInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    keyword = searchInput.value.trim();
+    render();
+  }
 });
 
 grid.addEventListener("click", (e) => {

@@ -15,34 +15,70 @@
 </head>
 <body>
   <header class="page-header page-header--home">
-    <div class="page-header__title page-header__title--brand">New Cafe</div>
+    <a class="page-header__title page-header__title--brand" href="index.html">New Cafe</a>
     <div class="page-header__actions">
-      <a class="cart-link" href="index.html">홈</a>
-      <a class="cart-link" href="menus/list.html">메뉴</a>
-      <a class="cart-link" href="orders/list.html">주문내역</a>
-      <a class="cart-link" href="basket/list.html">
-        장바구니
-        <span class="cart-link__count" id="cart-count" hidden>0</span>
-      </a>
-      <a class="cart-link" href="feedback/index.html">건의함</a>
-      <a class="cart-link" href="my/index.html">마이페이지</a>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-menu">
+        <span class="nav-toggle__bar"></span>
+      </button>
+      <nav class="nav-menu" id="nav-menu">
+        <a class="cart-link" href="menus/list.html">메뉴</a>
+        <a class="cart-link" href="orders/list.html">주문내역</a>
+        <a class="cart-link" href="basket/list.html">
+          장바구니
+          <span class="cart-link__count" id="cart-count" hidden>0</span>
+        </a>
+        <a class="cart-link" href="feedback/index.html">건의함</a>
+        <a class="cart-link" id="nav-my-link" href="my/index.html">마이페이지</a>
+        <button class="cart-link" id="auth-nav-btn" type="button">로그인</button>
+      </nav>
     </div>
   </header>
 
-  <section class="hero">
-    <div class="hero__media">
-      <img src="images/hero/hero-coffeeshop.jpg" alt="" loading="eager" />
-    </div>
-    <div class="hero__overlay"></div>
-    <div class="hero__content container">
-      <p class="eyebrow">따뜻한 브라운 톤의 작은 공간</p>
-      <h1 class="hero__title">오늘 하루,<br />커피 한 잔의 여유</h1>
-      <p class="hero__desc">직접 로스팅한 원두와 정성으로 만든 디저트를 만나보세요.</p>
-      <div class="hero__actions">
-        <a class="btn btn-primary" href="menus/list.html">메뉴 보러 가기</a>
-        <a class="btn btn-outline" href="#info">매장 안내</a>
+  <section class="hero" id="hero">
+    <div class="hero__slide is-active" data-slide="0">
+      <div class="hero__media">
+        <img src="images/hero/hero-coffeeshop.jpg" alt="" loading="eager" />
+      </div>
+      <div class="hero__overlay"></div>
+      <div class="hero__content container">
+        <p class="eyebrow">따뜻한 브라운 톤의 작은 공간</p>
+        <h1 class="hero__title">오늘 하루,<br />커피 한 잔의 여유</h1>
+        <p class="hero__desc">직접 로스팅한 원두와 정성으로 만든 디저트를 만나보세요.</p>
+        <div class="hero__actions">
+          <a class="btn btn-primary" href="menus/list.html">메뉴 보러 가기</a>
+          <a class="btn btn-outline" href="#info">매장 안내</a>
+        </div>
       </div>
     </div>
+
+    <div class="hero__slide hero__slide--beans" data-slide="1">
+      <div class="hero__content container">
+        <p class="eyebrow">Bean Guide</p>
+        <h1 class="hero__title">From Bean<br />to Cup</h1>
+        <p class="hero__desc">메뉴 상세 페이지에서 좋아하는 원두를 직접 골라보세요.</p>
+        <div class="hero__beans" id="hero-beans"></div>
+        <div class="hero__actions">
+          <a class="btn btn-primary" href="menus/list.html?category=coffee">커피 메뉴 보러 가기</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__slide hero__slide--today" id="hero-slide-today" data-slide="2"></div>
+
+    <div class="hero__slide hero__slide--signature" data-slide="3">
+      <div class="hero__content container">
+        <p class="eyebrow">Signature</p>
+        <h1 class="hero__title">시그니처 메뉴</h1>
+        <p class="hero__desc">우리 카페를 가장 잘 담은 대표 메뉴를 만나보세요.</p>
+        <div class="hero__signature-grid" id="hero-signature"></div>
+        <div class="hero__actions">
+          <a class="btn btn-primary" href="menus/list.html">전체 메뉴 보러 가기</a>
+        </div>
+      </div>
+    </div>
+
+    <button class="hero__nav hero__nav--prev" id="hero-prev" type="button" aria-label="이전 이미지">‹</button>
+    <button class="hero__nav hero__nav--next" id="hero-next" type="button" aria-label="다음 이미지">›</button>
   </section>
 
   <main class="home">

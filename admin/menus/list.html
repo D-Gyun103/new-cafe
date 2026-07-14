@@ -18,12 +18,19 @@
 
   <main class="container admin-menus">
     <div class="admin-menus__toolbar">
-      <input
-        type="search"
-        id="search-input"
-        placeholder="메뉴 이름으로 검색"
-        aria-label="메뉴 검색"
-      />
+      <label class="search-box">
+        <svg class="search-box__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.6" />
+          <path d="M17 17L13.4 13.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+        <input
+          type="search"
+          id="search-input"
+          placeholder="메뉴 이름으로 검색"
+          aria-label="메뉴 검색"
+        />
+        <button class="search-box__btn" id="search-btn" type="button">검색</button>
+      </label>
       <div class="tabs" id="category-tabs">
         <button class="tab is-active" data-category="all" type="button">전체</button>
       </div>

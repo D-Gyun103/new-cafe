@@ -24,6 +24,40 @@ export const FEEDBACK_CATEGORIES = [
   { id: "suggestion", name: "건의사항" },
 ];
 
+// 커피 메뉴 상세 페이지에서 선택하는 원두 종류 (대중적인 산지 위주로 구성)
+export const BEAN_ORIGINS = [
+  { id: "colombia", name: "콜롬비아", desc: "부드럽고 균형 잡힌 클래식한 맛" },
+  { id: "ethiopia", name: "에티오피아", desc: "화사한 꽃향과 산뜻한 산미" },
+  { id: "brazil", name: "브라질", desc: "고소한 너티함과 묵직한 바디감" },
+];
+
+// 온도 옵션이 있는(=음료) 메뉴에서 선택하는 사이즈
+export const SIZE_OPTIONS = [
+  { id: "regular", name: "Regular", priceDiff: 0 },
+  { id: "large", name: "Large", priceDiff: 500 },
+];
+
+// 커피 메뉴에서 선택하는 샷 옵션
+export const SHOT_OPTIONS = [
+  { id: "normal", name: "기본" },
+  { id: "extra", name: "샷 추가" },
+  { id: "mild", name: "연하게" },
+];
+
+// 온도 옵션이 있는(=음료) 메뉴에서 선택하는 물 양
+export const WATER_OPTIONS = [
+  { id: "normal", name: "보통" },
+  { id: "less", name: "물 적게" },
+  { id: "more", name: "물 많이" },
+];
+
+// 온도 옵션이 있는(=음료) 메뉴에서 선택하는 얼음 양
+export const ICE_OPTIONS = [
+  { id: "normal", name: "보통" },
+  { id: "less", name: "얼음 적게" },
+  { id: "more", name: "얼음 많이" },
+];
+
 // 최초 1회 localStorage 시딩에 사용되는 기본 메뉴 데이터
 export const INITIAL_MENUS = [
   {
@@ -36,6 +70,7 @@ export const INITIAL_MENUS = [
     temperatures: ["HOT", "ICE"],
     badge: "BEST",
     soldOut: false,
+    signature: false,
   },
   {
     id: "menu-2",
@@ -47,6 +82,7 @@ export const INITIAL_MENUS = [
     temperatures: ["HOT", "ICE"],
     badge: "BEST",
     soldOut: false,
+    signature: false,
   },
   {
     id: "menu-3",
@@ -58,6 +94,7 @@ export const INITIAL_MENUS = [
     temperatures: ["HOT", "ICE"],
     badge: null,
     soldOut: false,
+    signature: false,
   },
   {
     id: "menu-4",
@@ -69,6 +106,7 @@ export const INITIAL_MENUS = [
     temperatures: ["HOT", "ICE"],
     badge: null,
     soldOut: false,
+    signature: false,
   },
   {
     id: "menu-5",
@@ -80,6 +118,7 @@ export const INITIAL_MENUS = [
     temperatures: ["HOT", "ICE"],
     badge: null,
     soldOut: false,
+    signature: false,
   },
   {
     id: "menu-6",
@@ -91,6 +130,7 @@ export const INITIAL_MENUS = [
     temperatures: ["ICE"],
     badge: null,
     soldOut: false,
+    signature: false,
   },
   {
     id: "menu-7",
@@ -102,6 +142,7 @@ export const INITIAL_MENUS = [
     temperatures: ["HOT"],
     badge: null,
     soldOut: false,
+    signature: false,
   },
   {
     id: "menu-8",
@@ -113,6 +154,7 @@ export const INITIAL_MENUS = [
     temperatures: ["HOT", "ICE"],
     badge: null,
     soldOut: false,
+    signature: false,
   },
   {
     id: "menu-9",
@@ -124,6 +166,7 @@ export const INITIAL_MENUS = [
     temperatures: ["HOT", "ICE"],
     badge: null,
     soldOut: false,
+    signature: false,
   },
   {
     id: "menu-10",
@@ -135,6 +178,7 @@ export const INITIAL_MENUS = [
     temperatures: ["HOT", "ICE"],
     badge: null,
     soldOut: false,
+    signature: false,
   },
   {
     id: "menu-11",
@@ -146,6 +190,7 @@ export const INITIAL_MENUS = [
     temperatures: ["HOT"],
     badge: "NEW",
     soldOut: false,
+    signature: false,
   },
   {
     id: "menu-12",
@@ -157,6 +202,7 @@ export const INITIAL_MENUS = [
     temperatures: ["HOT", "ICE"],
     badge: null,
     soldOut: false,
+    signature: false,
   },
   {
     id: "menu-13",
@@ -168,6 +214,7 @@ export const INITIAL_MENUS = [
     temperatures: [],
     badge: "BEST",
     soldOut: false,
+    signature: true,
   },
   {
     id: "menu-14",
@@ -179,6 +226,7 @@ export const INITIAL_MENUS = [
     temperatures: [],
     badge: null,
     soldOut: false,
+    signature: false,
   },
   {
     id: "menu-15",
@@ -190,6 +238,7 @@ export const INITIAL_MENUS = [
     temperatures: [],
     badge: null,
     soldOut: true,
+    signature: false,
   },
   {
     id: "menu-16",
@@ -201,5 +250,78 @@ export const INITIAL_MENUS = [
     temperatures: [],
     badge: null,
     soldOut: false,
+    signature: false,
+  },
+  {
+    id: "menu-17",
+    name: "플랫화이트",
+    category: "coffee",
+    price: 5300,
+    description: "진한 에스프레소에 얇은 밀크 폼을 더해 부드럽고 진한 풍미가 살아있는 커피입니다.",
+    image: "menu-17.jpg",
+    temperatures: ["HOT", "ICE"],
+    badge: null,
+    soldOut: false,
+    signature: true,
+  },
+  {
+    id: "menu-18",
+    name: "아인슈페너",
+    category: "coffee",
+    price: 6000,
+    description: "진한 커피 위에 부드러운 크림을 듬뿍 올려 달콤 쌉싸름하게 즐기는 비엔나 커피입니다.",
+    image: "menu-18.jpg",
+    temperatures: ["HOT", "ICE"],
+    badge: "NEW",
+    soldOut: false,
+    signature: true,
+  },
+  {
+    id: "menu-19",
+    name: "헤이즐넛라떼",
+    category: "coffee",
+    price: 5600,
+    description: "고소한 헤이즐넛 시럽과 부드러운 우유가 에스프레소와 어우러진 향긋한 라떼입니다.",
+    image: "menu-19.jpg",
+    temperatures: ["HOT", "ICE"],
+    badge: "NEW",
+    soldOut: false,
+    signature: true,
+  },
+  {
+    id: "menu-20",
+    name: "흑당버블라떼",
+    category: "non-coffee",
+    price: 5800,
+    description: "진한 흑당 시럽과 쫀득한 타피오카 펄이 들어간 달콤한 밀크 음료입니다.",
+    image: "menu-20.jpg",
+    temperatures: ["ICE"],
+    badge: "BEST",
+    soldOut: false,
+    signature: false,
+  },
+  {
+    id: "menu-21",
+    name: "얼그레이티",
+    category: "tea",
+    price: 4800,
+    description: "은은한 베르가못 향이 매력적인 향긋하고 우아한 홍차입니다.",
+    image: "menu-21.jpg",
+    temperatures: ["HOT", "ICE"],
+    badge: null,
+    soldOut: false,
+    signature: false,
+  },
+  {
+    id: "menu-22",
+    name: "마카롱",
+    category: "dessert",
+    price: 3800,
+    description: "쫀득한 코크와 부드러운 필링이 조화로운 색색의 프랑스식 디저트입니다.",
+    image: "menu-22.jpg",
+    temperatures: [],
+    badge: null,
+    soldOut: false,
+    signature: false,
   },
 ];

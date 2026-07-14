@@ -28,6 +28,9 @@ function render() {
   }
 
   const badges = [];
+  if (menu.signature) {
+    badges.push(`<span class="badge badge-signature">시그니처</span>`);
+  }
   if (menu.badge) {
     const cls = menu.badge === "BEST" ? "badge-best" : "badge-new";
     badges.push(`<span class="badge ${cls}">${menu.badge}</span>`);
@@ -37,6 +40,20 @@ function render() {
   const temps = menu.temperatures.length
     ? menu.temperatures.map((t) => `<span class="badge badge-category">${t}</span>`).join("")
     : `<span class="hint">온도 옵션 없음</span>`;
+
+  const isCoffee = menu.category === "coffee";
+  const isDrink = menu.temperatures.length > 0;
+  const customerOptions = [
+    isDrink && "사이즈 선택 (Regular/Large)",
+    isCoffee && "원두 선택",
+    isCoffee && "샷 추가/연하게",
+    isDrink && "물 양 조절",
+    isDrink && "얼음 양 조절",
+    "요청사항 입력",
+  ].filter(Boolean);
+  const customerOptionsHTML = customerOptions
+    .map((label) => `<span class="badge badge-category">${label}</span>`)
+    .join("");
 
   root.innerHTML = `
     <div class="menu-detail__card glass-card">
@@ -57,6 +74,11 @@ function render() {
       <div class="menu-detail__section">
         <h3>온도 옵션</h3>
         <div class="menu-detail__temps">${temps}</div>
+      </div>
+
+      <div class="menu-detail__section">
+        <h3>고객 커스터마이징 옵션</h3>
+        <div class="menu-detail__temps">${customerOptionsHTML}</div>
       </div>
 
       <div class="menu-detail__section">

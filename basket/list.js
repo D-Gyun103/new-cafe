@@ -8,6 +8,14 @@ import {
   resolveImageSrc,
   showToast,
   updateCartBadge,
+  renderAuthNav,
+  initMobileNav,
+  getBeanOriginName,
+  getSizeOptionName,
+  getShotOptionName,
+  getWaterOptionName,
+  getIceOptionName,
+  getMenuUnitPrice,
 } from "../js/utils.js";
 
 const root = document.getElementById("basket-root");
@@ -28,14 +36,22 @@ function basketItemHTML(item, menu) {
           <h3 class="basket-item__name">${menu.name}</h3>
           <button class="basket-item__remove" type="button" aria-label="삭제">✕</button>
         </div>
-        ${item.temperature ? `<span class="badge badge-category">${item.temperature}</span>` : ""}
+        <div class="basket-item__badges">
+          ${item.temperature ? `<span class="badge badge-category">${item.temperature}</span>` : ""}
+          ${item.size ? `<span class="badge badge-category">${getSizeOptionName(item.size)}</span>` : ""}
+          ${item.origin ? `<span class="badge badge-category">${getBeanOriginName(item.origin)}</span>` : ""}
+          ${getShotOptionName(item.shotOption) ? `<span class="badge badge-category">${getShotOptionName(item.shotOption)}</span>` : ""}
+          ${getWaterOptionName(item.waterAmount) ? `<span class="badge badge-category">${getWaterOptionName(item.waterAmount)}</span>` : ""}
+          ${getIceOptionName(item.iceAmount) ? `<span class="badge badge-category">${getIceOptionName(item.iceAmount)}</span>` : ""}
+        </div>
+        ${item.request ? `<p class="basket-item__request">요청사항: ${item.request}</p>` : ""}
         <div class="basket-item__bottom">
           <div class="quantity-stepper quantity-stepper--sm">
             <button type="button" class="qty-minus">−</button>
             <span>${item.quantity}</span>
             <button type="button" class="qty-plus">+</button>
           </div>
-          <span class="basket-item__price">${formatPrice(menu.price * item.quantity)}</span>
+          <span class="basket-item__price">${formatPrice(getMenuUnitPrice(menu, item.size) * item.quantity)}</span>
         </div>
       </div>
     </div>
@@ -61,7 +77,10 @@ function render() {
   root.innerHTML = items.map(({ item, menu }) => basketItemHTML(item, menu)).join("");
 
   const totalCount = items.reduce((sum, { item }) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, { item, menu }) => sum + item.quantity * menu.price, 0);
+  const totalPrice = items.reduce(
+    (sum, { item, menu }) => sum + item.quantity * getMenuUnitPrice(menu, item.size),
+    0
+  );
   summaryCount.textContent = `${totalCount}개`;
   summaryTotal.textContent = formatPrice(totalPrice);
   updateCartBadge();
@@ -98,3 +117,5 @@ orderBtn.addEventListener("click", () => {
 });
 
 render();
+renderAuthNav("../login.html", "../index.html");
+initMobileNav();

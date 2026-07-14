@@ -6,6 +6,8 @@ import {
   updateCartBadge,
   getOrderStatusName,
   getOrderStatusBadgeClass,
+  renderAuthNav,
+  initMobileNav,
 } from "../js/utils.js";
 
 const root = document.getElementById("orders-root");
@@ -50,3 +52,5 @@ function render() {
 
 render();
 updateCartBadge();
+renderAuthNav("../login.html", "../index.html");
+initMobileNav();

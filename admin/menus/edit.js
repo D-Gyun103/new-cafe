@@ -94,9 +94,9 @@ function render() {
             <textarea id="description" name="description" required>${menu.description}</textarea>
           </div>
 
-          <div class="field">
+          <div class="field" id="temperature-field">
             <label>온도 옵션</label>
-            <div class="checkbox-group">${temperatureCheckboxes()}</div>
+            <div class="checkbox-group" id="temperature-group">${temperatureCheckboxes()}</div>
           </div>
 
           <div class="field">
@@ -108,6 +108,13 @@ function render() {
             <label class="checkbox-group">
               <input type="checkbox" id="soldOut" name="soldOut" ${menu.soldOut ? "checked" : ""} />
               <span>품절 처리</span>
+            </label>
+          </div>
+
+          <div class="field">
+            <label class="checkbox-group">
+              <input type="checkbox" id="signature" name="signature" ${menu.signature ? "checked" : ""} />
+              <span>시그니처 메뉴로 지정</span>
             </label>
           </div>
         </div>
@@ -128,6 +135,21 @@ function render() {
     previewImg.src = resolveImageSrc(e.target.value.trim());
   });
 
+  const categorySelect = document.getElementById("category");
+  const temperatureField = document.getElementById("temperature-field");
+  const temperatureGroup = document.getElementById("temperature-group");
+
+  function updateTemperatureFieldVisibility() {
+    const isDessert = categorySelect.value === "dessert";
+    temperatureField.hidden = isDessert;
+    if (isDessert) {
+      temperatureGroup.querySelectorAll('input[type="checkbox"]').forEach((cb) => (cb.checked = false));
+    }
+  }
+
+  categorySelect.addEventListener("change", updateTemperatureFieldVisibility);
+  updateTemperatureFieldVisibility();
+
   document.getElementById("menu-form").addEventListener("submit", (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -141,6 +163,7 @@ function render() {
       temperatures: formData.getAll("temperature"),
       badge: formData.get("badge"),
       soldOut: formData.get("soldOut") === "on",
+      signature: formData.get("signature") === "on",
     });
 
     showToast("메뉴가 수정되었습니다.");

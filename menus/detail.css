@@ -96,6 +96,91 @@
   color: #fff;
 }
 
+.origin-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-2);
+}
+
+.origin-option {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  text-align: left;
+  transition: all var(--transition-fast);
+}
+
+.origin-option strong {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.origin-option span {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.origin-option.is-soldout {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-bg-alt);
+}
+
+.choice-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.choice-option {
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-border);
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  transition: all var(--transition-fast);
+}
+
+.choice-option.is-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.menu-detail__request {
+  width: 100%;
+  min-height: 88px;
+  padding: var(--space-3) var(--space-4);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color var(--transition-fast);
+}
+
+.menu-detail__request:focus {
+  outline: none;
+  border-color: var(--color-primary-light);
+}
+
+.origin-option.is-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.origin-option.is-active strong,
+.origin-option.is-active span {
+  color: #fff;
+}
+
 .quantity-stepper {
   display: inline-flex;
   align-items: center;
@@ -126,9 +211,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--space-4);
   padding-top: var(--space-4);
   border-top: 1px solid var(--color-border);
+}
+
+.menu-detail__footer-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
 }
 
 .menu-detail__total {

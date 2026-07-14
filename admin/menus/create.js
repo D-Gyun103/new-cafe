@@ -5,9 +5,20 @@ requireAdminAuth();
 
 const form = document.getElementById("menu-form");
 const categorySelect = document.getElementById("category");
+const temperatureField = document.getElementById("temperature-field");
 const temperatureGroup = document.getElementById("temperature-group");
 const imageInput = document.getElementById("image");
 const imagePreview = document.getElementById("image-preview");
+
+function updateTemperatureFieldVisibility() {
+  const isDessert = categorySelect.value === "dessert";
+  temperatureField.hidden = isDessert;
+  if (isDessert) {
+    temperatureGroup.querySelectorAll('input[type="checkbox"]').forEach((cb) => (cb.checked = false));
+  }
+}
+
+categorySelect.addEventListener("change", updateTemperatureFieldVisibility);
 
 imagePreview.src = resolveImageSrc("");
 imagePreview.addEventListener("error", () => {
@@ -33,6 +44,8 @@ TEMPERATURES.forEach((temp) => {
   temperatureGroup.appendChild(label);
 });
 
+updateTemperatureFieldVisibility();
+
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const formData = new FormData(form);
@@ -46,6 +59,7 @@ form.addEventListener("submit", (e) => {
     temperatures: formData.getAll("temperature"),
     badge: formData.get("badge"),
     soldOut: formData.get("soldOut") === "on",
+    signature: formData.get("signature") === "on",
   });
 
   showToast(`'${menu.name}' 메뉴가 추가되었습니다.`);

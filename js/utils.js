@@ -1,27 +1,36 @@
 // ===== 카페 앱 - 공통 유틸리티 (스토리지, 카트, 포맷 등) =====
 
-import { CATEGORIES, INITIAL_MENUS, ORDER_STATUSES, FEEDBACK_CATEGORIES } from "./data.js";
+import {
+  CATEGORIES,
+  INITIAL_MENUS,
+  ORDER_STATUSES,
+  FEEDBACK_CATEGORIES,
+  BEAN_ORIGINS,
+  SIZE_OPTIONS,
+  SHOT_OPTIONS,
+  WATER_OPTIONS,
+  ICE_OPTIONS,
+} from "./data.js";
 
 const MENUS_KEY = "cafe_menus";
 const MENUS_VERSION_KEY = "cafe_menus_version";
 // INITIAL_MENUS의 기본값(특히 image 필드 형식)을 바꿀 때마다 올린다.
 // 버전이 다르면 캐시된 localStorage 값을 버리고 시드로 다시 초기화한다.
-const MENUS_VERSION = "2";
+const MENUS_VERSION = "5";
+const BEAN_ORIGINS_KEY = "cafe_bean_origins";
+const BEAN_ORIGINS_VERSION_KEY = "cafe_bean_origins_version";
+const BEAN_ORIGINS_VERSION = "1";
 const CART_KEY = "cafe_cart";
 const ORDERS_KEY = "cafe_orders";
-const PROFILE_KEY = "cafe_profile";
 const FEEDBACKS_KEY = "cafe_feedbacks";
 const ADMIN_AUTH_KEY = "cafe_admin_authed";
+const CUSTOMERS_KEY = "cafe_customers";
+// 로그인한 고객의 id만 저장한다(비밀번호 등은 담지 않음). 세션이 끝나면 자동 로그아웃된다.
+const CUSTOMER_SESSION_KEY = "cafe_customer_session";
 
 // 데모용 간단 로그인이라 자격 증명을 클라이언트 코드에 그대로 둔다.
 // 실제 서비스라면 서버 인증으로 대체해야 한다.
 const ADMIN_CREDENTIALS = { username: "admin", password: "admin123" };
-
-const DEFAULT_PROFILE = {
-  name: "이서연",
-  email: "seoyeon@example.com",
-  joinedAt: "2026.02.14",
-};
 
 /* ---------- 포맷 ---------- */
 
@@ -37,6 +46,39 @@ export function formatDateTime(iso) {
 
 export function getCategoryName(categoryId) {
   return CATEGORIES.find((c) => c.id === categoryId)?.name ?? categoryId;
+}
+
+export function getBeanOriginName(originId) {
+  return readBeanOrigins().find((o) => o.id === originId)?.name ?? originId;
+}
+
+export function getSizeOptionName(sizeId) {
+  return SIZE_OPTIONS.find((s) => s.id === sizeId)?.name ?? sizeId;
+}
+
+export function getSizeExtraPrice(sizeId) {
+  return SIZE_OPTIONS.find((s) => s.id === sizeId)?.priceDiff ?? 0;
+}
+
+/** 사이즈업 등으로 추가되는 금액까지 반영한, 실제로 결제되는 메뉴 1개당 가격이다. */
+export function getMenuUnitPrice(menu, sizeId) {
+  return menu.price + getSizeExtraPrice(sizeId);
+}
+
+// 옵션이 "기본"이면 굳이 뱃지로 보여줄 필요가 없어서, 그 경우엔 null을 반환한다.
+export function getShotOptionName(shotId) {
+  if (!shotId || shotId === "normal") return null;
+  return SHOT_OPTIONS.find((o) => o.id === shotId)?.name ?? null;
+}
+
+export function getWaterOptionName(waterId) {
+  if (!waterId || waterId === "normal") return null;
+  return WATER_OPTIONS.find((o) => o.id === waterId)?.name ?? null;
+}
+
+export function getIceOptionName(iceId) {
+  if (!iceId || iceId === "normal") return null;
+  return ICE_OPTIONS.find((o) => o.id === iceId)?.name ?? null;
 }
 
 export function getOrderStatusName(statusId) {
@@ -145,6 +187,7 @@ export function createMenu(data) {
     temperatures: data.temperatures ?? [],
     badge: data.badge || null,
     soldOut: Boolean(data.soldOut),
+    signature: Boolean(data.signature),
   };
   menus.push(menu);
   writeMenus(menus);
@@ -169,6 +212,45 @@ export function deleteMenu(id) {
   writeMenus(menus);
 }
 
+/* ---------- 원두 (관리자 품절 관리) ---------- */
+
+function seedBeanOrigins() {
+  const seeded = BEAN_ORIGINS.map((origin) => ({ ...origin, soldOut: false }));
+  localStorage.setItem(BEAN_ORIGINS_KEY, JSON.stringify(seeded));
+  localStorage.setItem(BEAN_ORIGINS_VERSION_KEY, BEAN_ORIGINS_VERSION);
+  return seeded;
+}
+
+function readBeanOrigins() {
+  const raw = localStorage.getItem(BEAN_ORIGINS_KEY);
+  const version = localStorage.getItem(BEAN_ORIGINS_VERSION_KEY);
+  if (!raw || version !== BEAN_ORIGINS_VERSION) {
+    return seedBeanOrigins();
+  }
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return seedBeanOrigins();
+  }
+}
+
+function writeBeanOrigins(origins) {
+  localStorage.setItem(BEAN_ORIGINS_KEY, JSON.stringify(origins));
+}
+
+export function getBeanOrigins() {
+  return readBeanOrigins();
+}
+
+export function setBeanOriginSoldOut(id, soldOut) {
+  const origins = readBeanOrigins();
+  const origin = origins.find((o) => o.id === id);
+  if (!origin) return null;
+  origin.soldOut = soldOut;
+  writeBeanOrigins(origins);
+  return origin;
+}
+
 /* ---------- 장바구니 ---------- */
 
 function readCart() {
@@ -189,10 +271,28 @@ export function getCart() {
   return readCart();
 }
 
-export function addToCart({ menuId, temperature = null, quantity = 1 }) {
+export function addToCart({
+  menuId,
+  temperature = null,
+  size = null,
+  origin = null,
+  shotOption = null,
+  waterAmount = null,
+  iceAmount = null,
+  request = "",
+  quantity = 1,
+}) {
   const cart = readCart();
   const existing = cart.find(
-    (item) => item.menuId === menuId && item.temperature === temperature
+    (item) =>
+      item.menuId === menuId &&
+      item.temperature === temperature &&
+      item.size === size &&
+      item.origin === origin &&
+      item.shotOption === shotOption &&
+      item.waterAmount === waterAmount &&
+      item.iceAmount === iceAmount &&
+      item.request === request
   );
   if (existing) {
     existing.quantity += quantity;
@@ -201,6 +301,12 @@ export function addToCart({ menuId, temperature = null, quantity = 1 }) {
       cartItemId: generateId("cart"),
       menuId,
       temperature,
+      size,
+      origin,
+      shotOption,
+      waterAmount,
+      iceAmount,
+      request,
       quantity,
     });
   }
@@ -230,7 +336,7 @@ export function getCartCount() {
 export function getCartTotal() {
   return readCart().reduce((sum, item) => {
     const menu = getMenuById(item.menuId);
-    return menu ? sum + menu.price * item.quantity : sum;
+    return menu ? sum + getMenuUnitPrice(menu, item.size) * item.quantity : sum;
   }, 0);
 }
 
@@ -280,14 +386,21 @@ export function createOrder() {
     .map((cartItem) => {
       const menu = getMenuById(cartItem.menuId);
       if (!menu) return null;
+      const unitPrice = getMenuUnitPrice(menu, cartItem.size);
       return {
         menuId: menu.id,
         name: menu.name,
         image: menu.image,
-        price: menu.price,
+        price: unitPrice,
         temperature: cartItem.temperature,
+        size: cartItem.size,
+        origin: cartItem.origin,
+        shotOption: cartItem.shotOption,
+        waterAmount: cartItem.waterAmount,
+        iceAmount: cartItem.iceAmount,
+        request: cartItem.request,
         quantity: cartItem.quantity,
-        subtotal: menu.price * cartItem.quantity,
+        subtotal: unitPrice * cartItem.quantity,
       };
     })
     .filter(Boolean);
@@ -321,38 +434,171 @@ export function deleteOrder(id) {
   writeOrders(readOrders().filter((order) => order.id !== id));
 }
 
-/* ---------- 프로필 (마이페이지) ---------- */
+/* ---------- 고객 회원가입/로그인 ----------
+ * 메뉴 조회·장바구니·주문·주문내역은 비회원도 이용할 수 있다.
+ * 건의함과 마이페이지만 로그인한 회원에게 제한한다.
+ * 데모용 로그인이라 비밀번호를 평문으로 localStorage에 저장한다.
+ * 실제 서비스라면 서버 인증으로 대체해야 한다.
+ */
 
-export function getProfile() {
-  const raw = localStorage.getItem(PROFILE_KEY);
-  if (!raw) {
-    localStorage.setItem(PROFILE_KEY, JSON.stringify(DEFAULT_PROFILE));
-    return { ...DEFAULT_PROFILE };
-  }
+function readCustomers() {
+  const raw = localStorage.getItem(CUSTOMERS_KEY);
+  if (!raw) return [];
   try {
-    const profile = JSON.parse(raw);
-    if (!profile?.name || !profile?.email) throw new Error("invalid profile");
-    return profile;
+    return JSON.parse(raw);
   } catch {
-    localStorage.setItem(PROFILE_KEY, JSON.stringify(DEFAULT_PROFILE));
-    return { ...DEFAULT_PROFILE };
+    return [];
   }
 }
 
-export function saveProfile(data) {
-  const profile = { ...getProfile(), ...data };
-  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
-  return profile;
+function writeCustomers(customers) {
+  localStorage.setItem(CUSTOMERS_KEY, JSON.stringify(customers));
+}
+
+function formatJoinedDate() {
+  const d = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
 }
 
 /**
- * 프로필/장바구니/주문 내역을 모두 삭제한다. (회원 탈퇴)
- * 메뉴 데이터(cafe_menus)는 앱 자체 데이터이므로 건드리지 않는다.
+ * 아이디 중복이면 실패하고, 성공하면 즉시 로그인 상태로 만든다.
  */
-export function resetCustomerData() {
-  localStorage.removeItem(PROFILE_KEY);
-  localStorage.removeItem(CART_KEY);
-  localStorage.removeItem(ORDERS_KEY);
+export function registerCustomer({ username, password, name, email }) {
+  const customers = readCustomers();
+  if (customers.some((customer) => customer.username === username)) {
+    return { ok: false, error: "이미 사용 중인 아이디입니다." };
+  }
+  const customer = {
+    id: generateId("customer"),
+    username,
+    password,
+    name,
+    email,
+    joinedAt: formatJoinedDate(),
+  };
+  writeCustomers([...customers, customer]);
+  sessionStorage.setItem(CUSTOMER_SESSION_KEY, customer.id);
+  return { ok: true, customer };
+}
+
+export function loginCustomer(username, password) {
+  const customer = readCustomers().find(
+    (c) => c.username === username && c.password === password
+  );
+  if (!customer) return false;
+  sessionStorage.setItem(CUSTOMER_SESSION_KEY, customer.id);
+  return true;
+}
+
+export function logoutCustomer() {
+  sessionStorage.removeItem(CUSTOMER_SESSION_KEY);
+}
+
+export function getCurrentCustomer() {
+  const id = sessionStorage.getItem(CUSTOMER_SESSION_KEY);
+  if (!id) return null;
+  return readCustomers().find((customer) => customer.id === id) ?? null;
+}
+
+export function isCustomerAuthed() {
+  return Boolean(getCurrentCustomer());
+}
+
+export function updateCurrentCustomer(data) {
+  const id = sessionStorage.getItem(CUSTOMER_SESSION_KEY);
+  if (!id) return null;
+  const customers = readCustomers();
+  const customer = customers.find((c) => c.id === id);
+  if (!customer) return null;
+  Object.assign(customer, data);
+  writeCustomers(customers);
+  return customer;
+}
+
+/**
+ * 로그인이 안 되어 있으면 로그인 페이지로 즉시 이동시키고,
+ * 로그인 후 원래 페이지로 돌아올 수 있도록 redirect 쿼리를 함께 붙인다.
+ * loginPath는 호출하는 페이지 기준 로그인 페이지 상대 경로다 (예: "../login.html").
+ */
+export function requireCustomerAuth(loginPath) {
+  if (isCustomerAuthed()) return true;
+  const redirect = encodeURIComponent(window.location.pathname + window.location.search);
+  window.location.href = `${loginPath}?redirect=${redirect}`;
+  return false;
+}
+
+/**
+ * 계정을 삭제하고 로그아웃한다. (회원 탈퇴)
+ * 장바구니·주문 내역은 비회원도 함께 쓰는 공용 데이터이므로 건드리지 않는다.
+ */
+export function withdrawCurrentCustomer() {
+  const id = sessionStorage.getItem(CUSTOMER_SESSION_KEY);
+  if (!id) return;
+  writeCustomers(readCustomers().filter((customer) => customer.id !== id));
+  logoutCustomer();
+}
+
+/**
+ * id="auth-nav-btn" 버튼이 있는 페이지에서 호출하면 로그인 여부에 따라
+ * "로그인"/"로그아웃" 버튼으로 동작하게 만든다. 어느 페이지에서든 동일하게 쓸 수 있다.
+ * loginPath/homePath는 호출하는 페이지 기준 상대 경로다 (예: "../login.html", "../index.html").
+ */
+export function renderAuthNav(loginPath, homePath) {
+  const btn = document.getElementById("auth-nav-btn");
+  const myLink = document.getElementById("nav-my-link");
+  const authed = isCustomerAuthed();
+
+  if (myLink) myLink.hidden = !authed;
+
+  if (!btn) return;
+
+  if (authed) {
+    btn.textContent = "로그아웃";
+    btn.addEventListener("click", () => {
+      logoutCustomer();
+      window.location.href = homePath;
+    });
+  } else {
+    btn.textContent = "로그인";
+    btn.addEventListener("click", () => {
+      const redirect = encodeURIComponent(window.location.pathname + window.location.search);
+      window.location.href = `${loginPath}?redirect=${redirect}`;
+    });
+  }
+}
+
+/* ---------- 반응형 내비게이션 (모바일 햄버거 메뉴) ----------
+ * id="nav-toggle" 버튼과 id="nav-menu" 내비게이션이 있는 페이지에서 호출하면
+ * 좁은 화면에서 햄버거 버튼으로 메뉴를 열고 닫을 수 있게 해준다.
+ * 데스크톱 폭에서는 CSS가 항상 펼쳐진 상태로 보여주므로 이 함수와 무관하다.
+ */
+export function initMobileNav() {
+  const toggle = document.getElementById("nav-toggle");
+  const menu = document.getElementById("nav-menu");
+  if (!toggle || !menu) return;
+
+  const closeMenu = () => {
+    menu.classList.remove("is-open");
+    toggle.setAttribute("aria-expanded", "false");
+  };
+
+  toggle.addEventListener("click", () => {
+    const isOpen = menu.classList.toggle("is-open");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  menu.addEventListener("click", (event) => {
+    if (event.target.closest("a, button")) closeMenu();
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!menu.classList.contains("is-open")) return;
+    if (menu.contains(event.target) || toggle.contains(event.target)) return;
+    closeMenu();
+  });
+
+  window.addEventListener("resize", closeMenu);
 }
 
 /* ---------- 건의함 (불편/건의사항) ----------
@@ -383,20 +629,26 @@ export function getFeedbackById(id) {
 }
 
 export function createFeedback({ category, title, content }) {
-  const profile = getProfile();
+  const customer = getCurrentCustomer();
   const feedback = {
     id: generateId("feedback"),
     category,
     title,
     content,
-    authorName: profile.name,
-    authorEmail: profile.email,
+    authorName: customer?.name ?? "회원",
+    authorEmail: customer?.email ?? "-",
+    customerId: customer?.id ?? null,
     reply: null,
     repliedAt: null,
     createdAt: new Date().toISOString(),
   };
   writeFeedbacks([...readFeedbacks(), feedback]);
   return feedback;
+}
+
+/** 마이페이지의 "건의·불편 내역" 탭에서, 로그인한 고객 본인이 작성한 건의만 모아 보여줄 때 쓴다. */
+export function getFeedbacksByCustomer(customerId) {
+  return getFeedbacks().filter((feedback) => feedback.customerId === customerId);
 }
 
 export function replyToFeedback(id, reply) {

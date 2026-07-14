@@ -12,15 +12,21 @@
     <a class="back-link" href="list.html">← 메뉴 목록</a>
     <div class="page-header__title">메뉴 상세</div>
     <div class="page-header__actions">
-      <a class="cart-link" href="../index.html">홈</a>
-      <a class="cart-link" href="../menus/list.html">메뉴</a>
-      <a class="cart-link" href="../orders/list.html">주문내역</a>
-      <a class="cart-link" href="../basket/list.html">
-        장바구니
-        <span class="cart-link__count" id="cart-count" hidden>0</span>
-      </a>
-      <a class="cart-link" href="../feedback/index.html">건의함</a>
-      <a class="cart-link" href="../my/index.html">마이페이지</a>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-menu">
+        <span class="nav-toggle__bar"></span>
+      </button>
+      <nav class="nav-menu" id="nav-menu">
+        <a class="cart-link" href="../index.html">홈</a>
+        <a class="cart-link" href="../menus/list.html">메뉴</a>
+        <a class="cart-link" href="../orders/list.html">주문내역</a>
+        <a class="cart-link" href="../basket/list.html">
+          장바구니
+          <span class="cart-link__count" id="cart-count" hidden>0</span>
+        </a>
+        <a class="cart-link" href="../feedback/index.html">건의함</a>
+        <a class="cart-link" id="nav-my-link" href="../my/index.html">마이페이지</a>
+        <button class="cart-link" id="auth-nav-btn" type="button">로그인</button>
+      </nav>
     </div>
   </header>
 

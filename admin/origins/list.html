@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>원두 관리 | 카페 어드민</title>
+  <link rel="stylesheet" href="../../css/variables.css" />
+  <link rel="stylesheet" href="list.css" />
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="../index.html">← 대시보드</a>
+    <div class="page-header__title">원두 관리</div>
+    <div class="page-header__actions"></div>
+  </header>
+
+  <main class="container admin-origins">
+    <p class="admin-origins__desc">품절 처리한 원두는 고객 메뉴 상세 페이지의 원두 선택에서 선택할 수 없게 됩니다.</p>
+    <div class="admin-origins__list" id="origins-root"></div>
+  </main>
+
+  <script type="module" src="list.js"></script>
+</body>
+</html>

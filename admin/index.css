@@ -5,6 +5,16 @@
   gap: var(--space-7);
 }
 
+/* 대시보드 헤더의 버튼 2개가 너무 붙어 보여서 간격을 더 벌린다. */
+.page-header .page-header__actions {
+  gap: var(--space-3);
+}
+
+/* 바로가기 카드가 4개(메뉴/원두/주문/건의함)라 한 줄로 정리한다. */
+.quick-links {
+  grid-template-columns: repeat(4, 1fr);
+}
+
 /* ===== 총 매출 배너 ===== */
 .revenue-banner {
   display: flex;
@@ -162,6 +172,10 @@
 
 /* ===== 반응형 ===== */
 @media (max-width: 720px) {
+  .quick-links {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .dashboard-stats {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -170,5 +184,11 @@
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-3);
+  }
+}
+
+@media (max-width: 420px) {
+  .quick-links {
+    grid-template-columns: 1fr;
   }
 }

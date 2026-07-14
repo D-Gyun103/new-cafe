@@ -1,5 +1,16 @@
 import { FEEDBACK_CATEGORIES } from "../js/data.js";
-import { createFeedback, showToast, updateCartBadge } from "../js/utils.js";
+import {
+  createFeedback,
+  showToast,
+  updateCartBadge,
+  requireCustomerAuth,
+  renderAuthNav,
+  initMobileNav,
+} from "../js/utils.js";
+
+requireCustomerAuth("../login.html");
+renderAuthNav("../login.html", "../index.html");
+initMobileNav();
 
 const form = document.getElementById("feedback-form");
 const categoryGroup = document.getElementById("category-group");
