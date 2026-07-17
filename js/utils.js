@@ -594,8 +594,13 @@ export async function deleteOrder(id) {
 export async function registerCustomer({ email, password, name }) {
   const { data, error } = await supabase.auth.signUp({ email, password });
   if (error) {
-    const isDuplicate = /already registered|already exists/i.test(error.message);
-    return { ok: false, error: isDuplicate ? "이미 사용 중인 이메일입니다." : error.message };
+    if (/already registered|already exists/i.test(error.message)) {
+      return { ok: false, error: "이미 사용 중인 이메일입니다." };
+    }
+    if (/rate limit/i.test(error.message)) {
+      return { ok: false, error: "잠시 후 다시 시도해주세요. (이메일 발송 한도 초과)" };
+    }
+    return { ok: false, error: "가입 처리 중 문제가 발생했습니다." };
   }
   if (!data.user) {
     return { ok: false, error: "가입 처리 중 문제가 발생했습니다." };

@@ -827,6 +827,7 @@ button {
 .field input[type="number"],
 .field input[type="search"],
 .field input[type="password"],
+.field input[type="email"],
 .field select,
 .field textarea {
   width: 100%;
