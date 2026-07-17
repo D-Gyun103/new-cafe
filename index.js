@@ -41,15 +41,12 @@ function menuCardHTML(menu) {
   `;
 }
 
-function renderBestMenus() {
-  const bestMenus = getMenus()
-    .filter((menu) => menu.badge === "BEST" && !menu.soldOut)
-    .slice(0, 4);
+function renderBestMenus(menus) {
+  const bestMenus = menus.filter((menu) => menu.badge === "BEST" && !menu.soldOut).slice(0, 4);
   bestRoot.innerHTML = bestMenus.map(menuCardHTML).join("");
 }
 
-function renderCategoryTiles() {
-  const menus = getMenus();
+function renderCategoryTiles(menus) {
   categoryRoot.innerHTML = CATEGORIES.map((category) => {
     const sample =
       menus.find((menu) => menu.category === category.id && !menu.soldOut) ??
@@ -63,9 +60,9 @@ function renderCategoryTiles() {
   }).join("");
 }
 
-function renderHeroBeans() {
+function renderHeroBeans(beanOrigins) {
   if (!heroBeansRoot) return;
-  heroBeansRoot.innerHTML = getBeanOrigins()
+  heroBeansRoot.innerHTML = beanOrigins
     .map(
       (origin) => `
         <div class="hero__bean">
@@ -83,11 +80,11 @@ function getDayOfYear(date) {
   return Math.floor((date - start) / 86400000);
 }
 
-function renderHeroToday() {
+function renderHeroToday(menus) {
   if (!heroTodayRoot) return;
-  const menus = getMenus().filter((menu) => !menu.soldOut);
-  if (menus.length === 0) return;
-  const pick = menus[getDayOfYear(new Date()) % menus.length];
+  const available = menus.filter((menu) => !menu.soldOut);
+  if (available.length === 0) return;
+  const pick = available[getDayOfYear(new Date()) % available.length];
 
   heroTodayRoot.innerHTML = `
     <div class="hero__media">
@@ -105,9 +102,9 @@ function renderHeroToday() {
   `;
 }
 
-function renderHeroSignature() {
+function renderHeroSignature(menus) {
   if (!heroSignatureRoot) return;
-  const signatureMenus = getMenus().filter((menu) => menu.signature);
+  const signatureMenus = menus.filter((menu) => menu.signature);
   heroSignatureRoot.innerHTML = signatureMenus
     .map(
       (menu) => `
@@ -153,12 +150,17 @@ heroPrevBtn?.addEventListener("click", () => {
   startHeroAutoplay();
 });
 
-renderBestMenus();
-renderCategoryTiles();
-renderHeroBeans();
-renderHeroToday();
-renderHeroSignature();
-startHeroAutoplay();
+async function init() {
+  const [menus, beanOrigins] = await Promise.all([getMenus(), getBeanOrigins()]);
+  renderBestMenus(menus);
+  renderCategoryTiles(menus);
+  renderHeroBeans(beanOrigins);
+  renderHeroToday(menus);
+  renderHeroSignature(menus);
+  startHeroAutoplay();
+}
+
+init();
 updateCartBadge();
 renderAuthNav("login.html", "index.html");
 initMobileNav();

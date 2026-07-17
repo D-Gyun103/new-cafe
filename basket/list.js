@@ -1,6 +1,6 @@
 import {
   getCart,
-  getMenuById,
+  getMenus,
   updateCartItemQty,
   removeFromCart,
   createOrder,
@@ -10,6 +10,7 @@ import {
   updateCartBadge,
   renderAuthNav,
   initMobileNav,
+  getBeanOrigins,
   getBeanOriginName,
   getSizeOptionName,
   getShotOptionName,
@@ -25,6 +26,8 @@ const summaryCount = document.getElementById("summary-count");
 const summaryTotal = document.getElementById("summary-total");
 const orderBtn = document.getElementById("order-btn");
 
+let beanOrigins = [];
+
 function basketItemHTML(item, menu) {
   return `
     <div class="basket-item glass-card" data-cart-item-id="${item.cartItemId}">
@@ -39,7 +42,7 @@ function basketItemHTML(item, menu) {
         <div class="basket-item__badges">
           ${item.temperature ? `<span class="badge badge-category">${item.temperature}</span>` : ""}
           ${item.size ? `<span class="badge badge-category">${getSizeOptionName(item.size)}</span>` : ""}
-          ${item.origin ? `<span class="badge badge-category">${getBeanOriginName(item.origin)}</span>` : ""}
+          ${item.origin ? `<span class="badge badge-category">${getBeanOriginName(beanOrigins, item.origin)}</span>` : ""}
           ${getShotOptionName(item.shotOption) ? `<span class="badge badge-category">${getShotOptionName(item.shotOption)}</span>` : ""}
           ${getWaterOptionName(item.waterAmount) ? `<span class="badge badge-category">${getWaterOptionName(item.waterAmount)}</span>` : ""}
           ${getIceOptionName(item.iceAmount) ? `<span class="badge badge-category">${getIceOptionName(item.iceAmount)}</span>` : ""}
@@ -58,10 +61,14 @@ function basketItemHTML(item, menu) {
   `;
 }
 
-function render() {
+async function render() {
   const cart = getCart();
+  const [menus, origins] = await Promise.all([getMenus(), getBeanOrigins()]);
+  beanOrigins = origins;
+  const menuMap = new Map(menus.map((m) => [m.id, m]));
+
   const items = cart
-    .map((item) => ({ item, menu: getMenuById(item.menuId) }))
+    .map((item) => ({ item, menu: menuMap.get(item.menuId) }))
     .filter(({ menu }) => menu);
 
   if (items.length === 0) {
@@ -106,9 +113,13 @@ root.addEventListener("click", (e) => {
   }
 });
 
-orderBtn.addEventListener("click", () => {
-  const order = createOrder();
-  if (!order) return;
+orderBtn.addEventListener("click", async () => {
+  orderBtn.disabled = true;
+  const order = await createOrder();
+  if (!order) {
+    orderBtn.disabled = false;
+    return;
+  }
   showToast("주문이 완료되었습니다.");
   updateCartBadge();
   setTimeout(() => {

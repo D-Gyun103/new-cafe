@@ -9,7 +9,7 @@ import {
   requireAdminAuth,
 } from "../../js/utils.js";
 
-requireAdminAuth();
+const authed = await requireAdminAuth();
 
 const grid = document.getElementById("menu-grid");
 const emptyState = document.getElementById("empty-state");
@@ -18,6 +18,7 @@ const searchInput = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-btn");
 const tabsEl = document.getElementById("category-tabs");
 
+let allMenus = [];
 let activeCategory = "all";
 let keyword = "";
 
@@ -71,7 +72,7 @@ function renderMenuCard(menu) {
 }
 
 function render() {
-  const menus = getMenus().filter((menu) => {
+  const menus = allMenus.filter((menu) => {
     const matchesCategory = activeCategory === "all" || menu.category === activeCategory;
     const matchesKeyword = menu.name.toLowerCase().includes(keyword.toLowerCase());
     return matchesCategory && matchesKeyword;
@@ -86,6 +87,11 @@ function render() {
     emptyState.hidden = true;
     menus.forEach((menu) => grid.appendChild(renderMenuCard(menu)));
   }
+}
+
+async function reload() {
+  allMenus = await getMenus();
+  render();
 }
 
 tabsEl.addEventListener("click", (e) => {
@@ -115,16 +121,18 @@ searchInput.addEventListener("keydown", (e) => {
   }
 });
 
-grid.addEventListener("click", (e) => {
+grid.addEventListener("click", async (e) => {
   const deleteBtn = e.target.closest("[data-delete-id]");
   if (!deleteBtn) return;
   const id = deleteBtn.dataset.deleteId;
   if (confirm("이 메뉴를 삭제하시겠습니까?")) {
-    deleteMenu(id);
+    await deleteMenu(id);
     showToast("메뉴가 삭제되었습니다.");
-    render();
+    reload();
   }
 });
 
-renderTabs();
-render();
+if (authed) {
+  renderTabs();
+  reload();
+}

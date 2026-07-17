@@ -8,7 +8,7 @@ import {
   initMobileNav,
 } from "../js/utils.js";
 
-requireCustomerAuth("../login.html");
+await requireCustomerAuth("../login.html");
 renderAuthNav("../login.html", "../index.html");
 initMobileNav();
 
@@ -24,16 +24,19 @@ categoryGroup.innerHTML = FEEDBACK_CATEGORIES.map(
   `
 ).join("");
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = new FormData(form);
+  const submitBtn = form.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
 
-  createFeedback({
+  await createFeedback({
     category: formData.get("category"),
     title: formData.get("title").trim(),
     content: formData.get("content").trim(),
   });
 
+  submitBtn.disabled = false;
   showToast("소중한 의견 감사합니다. 접수되었습니다.");
   form.reset();
   categoryGroup.querySelector("input").checked = true;

@@ -9,13 +9,12 @@ import {
   requireAdminAuth,
 } from "../../js/utils.js";
 
-requireAdminAuth();
+const authed = await requireAdminAuth();
 
 const root = document.getElementById("menu-detail-root");
 const id = getQueryParam("id");
-const menu = id ? getMenuById(id) : null;
 
-function render() {
+function render(menu) {
   if (!menu) {
     root.innerHTML = `
       <div class="empty-state">
@@ -95,13 +94,16 @@ function render() {
     </div>
   `;
 
-  document.getElementById("delete-btn").addEventListener("click", () => {
+  document.getElementById("delete-btn").addEventListener("click", async () => {
     if (confirm("이 메뉴를 삭제하시겠습니까?")) {
-      deleteMenu(menu.id);
+      await deleteMenu(menu.id);
       showToast("메뉴가 삭제되었습니다.");
       window.location.href = "list.html";
     }
   });
 }
 
-render();
+if (authed) {
+  const menu = id ? await getMenuById(id) : null;
+  render(menu);
+}

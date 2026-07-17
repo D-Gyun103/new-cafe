@@ -1,6 +1,6 @@
 import { getBeanOrigins, setBeanOriginSoldOut, showToast, requireAdminAuth } from "../../js/utils.js";
 
-requireAdminAuth();
+const authed = await requireAdminAuth();
 
 const root = document.getElementById("origins-root");
 
@@ -27,21 +27,25 @@ function originCardHTML(origin) {
   `;
 }
 
-function render() {
-  root.innerHTML = getBeanOrigins().map(originCardHTML).join("");
+async function render() {
+  const origins = await getBeanOrigins();
+  root.innerHTML = origins.map(originCardHTML).join("");
 }
 
-root.addEventListener("click", (e) => {
+root.addEventListener("click", async (e) => {
   const btn = e.target.closest("[data-toggle-id]");
   if (!btn) return;
   const id = btn.dataset.toggleId;
-  const origin = getBeanOrigins().find((o) => o.id === id);
+  const origins = await getBeanOrigins();
+  const origin = origins.find((o) => o.id === id);
   if (!origin) return;
 
   const nextSoldOut = !origin.soldOut;
-  setBeanOriginSoldOut(id, nextSoldOut);
+  await setBeanOriginSoldOut(id, nextSoldOut);
   showToast(`${origin.name} 원두를 ${nextSoldOut ? "품절" : "판매중"} 처리했습니다.`);
   render();
 });
 
-render();
+if (authed) {
+  render();
+}

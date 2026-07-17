@@ -38,8 +38,8 @@ function orderCardHTML(order) {
   `;
 }
 
-function render() {
-  const orders = getOrders();
+async function render() {
+  const orders = await getOrders();
 
   if (orders.length === 0) {
     root.innerHTML = "";

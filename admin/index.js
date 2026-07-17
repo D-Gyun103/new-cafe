@@ -11,7 +11,7 @@ import {
   logoutAdmin,
 } from "../js/utils.js";
 
-requireAdminAuth();
+const authed = await requireAdminAuth();
 
 const statsEl = document.getElementById("dashboard-stats");
 const revenueEl = document.getElementById("dashboard-revenue");
@@ -27,8 +27,7 @@ function statCardHTML(label, value) {
   `;
 }
 
-function renderRevenue() {
-  const orders = getOrders();
+function renderRevenue(orders) {
   const validOrders = orders.filter((order) => (order.status ?? "received") !== "canceled");
   const revenue = validOrders.reduce((sum, order) => sum + order.totalPrice, 0);
 
@@ -43,10 +42,7 @@ function renderRevenue() {
   `;
 }
 
-function renderStats() {
-  const menus = getMenus();
-  const orders = getOrders();
-  const feedbacks = getFeedbacks();
+function renderStats(menus, orders, feedbacks) {
   const soldOutCount = menus.filter((menu) => menu.soldOut).length;
   const pendingFeedbackCount = feedbacks.filter((feedback) => !feedback.reply).length;
 
@@ -78,23 +74,30 @@ function recentOrderHTML(order) {
   `;
 }
 
-function renderRecentOrders() {
-  const orders = getOrders().slice(0, 5);
+function renderRecentOrders(orders) {
+  const recent = orders.slice(0, 5);
 
-  if (orders.length === 0) {
+  if (recent.length === 0) {
     recentOrdersEl.innerHTML = "";
     emptyState.hidden = false;
     return;
   }
   emptyState.hidden = true;
-  recentOrdersEl.innerHTML = orders.map(recentOrderHTML).join("");
+  recentOrdersEl.innerHTML = recent.map(recentOrderHTML).join("");
 }
 
-renderRevenue();
-renderStats();
-renderRecentOrders();
+async function render() {
+  const [menus, orders, feedbacks] = await Promise.all([getMenus(), getOrders(), getFeedbacks()]);
+  renderRevenue(orders);
+  renderStats(menus, orders, feedbacks);
+  renderRecentOrders(orders);
+}
 
-document.getElementById("logout-btn").addEventListener("click", () => {
-  logoutAdmin();
+if (authed) {
+  render();
+}
+
+document.getElementById("logout-btn").addEventListener("click", async () => {
+  await logoutAdmin();
   window.location.href = "login.html";
 });

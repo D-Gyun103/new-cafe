@@ -20,6 +20,7 @@ let activeCategory = CATEGORIES.some((c) => c.id === requestedCategory)
   ? requestedCategory
   : "all";
 let keyword = "";
+let allMenus = [];
 
 function renderTabs() {
   tabsEl.querySelector('[data-category="all"]').classList.toggle(
@@ -63,7 +64,7 @@ function menuCardHTML(menu) {
 }
 
 function render() {
-  const filtered = getMenus().filter((menu) =>
+  const filtered = allMenus.filter((menu) =>
     menu.name.toLowerCase().includes(keyword.toLowerCase())
   );
 
@@ -123,8 +124,13 @@ searchInput.addEventListener("keydown", (e) => {
   }
 });
 
+async function init() {
+  allMenus = await getMenus();
+  render();
+}
+
 renderTabs();
-render();
+init();
 updateCartBadge();
 renderAuthNav("../login.html", "../index.html");
 initMobileNav();

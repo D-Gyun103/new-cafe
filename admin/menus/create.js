@@ -1,7 +1,7 @@
 import { CATEGORIES, TEMPERATURES } from "../../js/data.js";
 import { createMenu, showToast, resolveImageSrc, requireAdminAuth } from "../../js/utils.js";
 
-requireAdminAuth();
+const authed = await requireAdminAuth();
 
 const form = document.getElementById("menu-form");
 const categorySelect = document.getElementById("category");
@@ -46,11 +46,13 @@ TEMPERATURES.forEach((temp) => {
 
 updateTemperatureFieldVisibility();
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = new FormData(form);
+  const submitBtn = form.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
 
-  const menu = createMenu({
+  const menu = await createMenu({
     name: formData.get("name").trim(),
     image: formData.get("image").trim(),
     category: formData.get("category"),
@@ -62,8 +64,18 @@ form.addEventListener("submit", (e) => {
     signature: formData.get("signature") === "on",
   });
 
+  if (!menu) {
+    submitBtn.disabled = false;
+    showToast("메뉴 추가에 실패했습니다.");
+    return;
+  }
+
   showToast(`'${menu.name}' 메뉴가 추가되었습니다.`);
   setTimeout(() => {
     window.location.href = "list.html";
   }, 600);
 });
+
+if (!authed) {
+  form.querySelector('button[type="submit"]').disabled = true;
+}

@@ -1,6 +1,6 @@
 import { loginAdmin, isAdminAuthed } from "../js/utils.js";
 
-if (isAdminAuthed()) {
+if (await isAdminAuthed()) {
   window.location.href = "index.html";
 }
 
@@ -16,16 +16,20 @@ passwordToggle.addEventListener("click", () => {
   passwordToggle.setAttribute("aria-label", showing ? "비밀번호 표시" : "비밀번호 숨기기");
 });
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = new FormData(form);
-  const username = formData.get("username").trim();
+  const email = formData.get("email").trim();
   const password = formData.get("password").trim();
 
-  if (loginAdmin(username, password)) {
+  const submitBtn = form.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+
+  if (await loginAdmin(email, password)) {
     window.location.href = "index.html";
     return;
   }
 
+  submitBtn.disabled = false;
   errorEl.hidden = false;
 });

@@ -8,7 +8,7 @@ import {
   requireAdminAuth,
 } from "../../js/utils.js";
 
-requireAdminAuth();
+const authed = await requireAdminAuth();
 
 const listEl = document.getElementById("feedback-list");
 const emptyState = document.getElementById("empty-state");
@@ -16,6 +16,7 @@ const resultCount = document.getElementById("result-count");
 const categoryTabsEl = document.getElementById("category-tabs");
 const statusTabsEl = document.getElementById("status-tabs");
 
+let allFeedbacks = [];
 let activeCategory = "all";
 let activeStatus = "all";
 
@@ -56,7 +57,7 @@ function feedbackRowHTML(feedback) {
 }
 
 function render() {
-  const feedbacks = getFeedbacks().filter((feedback) => {
+  const feedbacks = allFeedbacks.filter((feedback) => {
     const matchesCategory = activeCategory === "all" || feedback.category === activeCategory;
     const isAnswered = Boolean(feedback.reply);
     const matchesStatus =
@@ -77,6 +78,11 @@ function render() {
   listEl.innerHTML = feedbacks.map(feedbackRowHTML).join("");
 }
 
+async function reload() {
+  allFeedbacks = await getFeedbacks();
+  render();
+}
+
 categoryTabsEl.addEventListener("click", (e) => {
   const btn = e.target.closest(".tab");
   if (!btn) return;
@@ -95,15 +101,17 @@ statusTabsEl.addEventListener("click", (e) => {
   render();
 });
 
-listEl.addEventListener("click", (e) => {
+listEl.addEventListener("click", async (e) => {
   const deleteBtn = e.target.closest("[data-delete-id]");
   if (!deleteBtn) return;
   if (confirm("이 건의사항을 삭제하시겠습니까?")) {
-    deleteFeedback(deleteBtn.dataset.deleteId);
+    await deleteFeedback(deleteBtn.dataset.deleteId);
     showToast("삭제되었습니다.");
-    render();
+    reload();
   }
 });
 
-renderCategoryTabs();
-render();
+if (authed) {
+  renderCategoryTabs();
+  reload();
+}

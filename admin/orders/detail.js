@@ -11,6 +11,7 @@ import {
   getOrderStatusBadgeClass,
   showToast,
   requireAdminAuth,
+  getBeanOrigins,
   getBeanOriginName,
   getSizeOptionName,
   getShotOptionName,
@@ -18,11 +19,12 @@ import {
   getIceOptionName,
 } from "../../js/utils.js";
 
-requireAdminAuth();
+const authed = await requireAdminAuth();
 
 const root = document.getElementById("order-detail-root");
 const id = getQueryParam("id");
-let order = id ? getOrderById(id) : null;
+let order = null;
+let beanOrigins = [];
 
 function itemRowHTML(item) {
   return `
@@ -38,7 +40,7 @@ function itemRowHTML(item) {
         <div class="order-item__meta">
           ${item.temperature ? `<span class="badge badge-category">${item.temperature}</span>` : ""}
           ${item.size ? `<span class="badge badge-category">${getSizeOptionName(item.size)}</span>` : ""}
-          ${item.origin ? `<span class="badge badge-category">${getBeanOriginName(item.origin)}</span>` : ""}
+          ${item.origin ? `<span class="badge badge-category">${getBeanOriginName(beanOrigins, item.origin)}</span>` : ""}
           ${getShotOptionName(item.shotOption) ? `<span class="badge badge-category">${getShotOptionName(item.shotOption)}</span>` : ""}
           ${getWaterOptionName(item.waterAmount) ? `<span class="badge badge-category">${getWaterOptionName(item.waterAmount)}</span>` : ""}
           ${getIceOptionName(item.iceAmount) ? `<span class="badge badge-category">${getIceOptionName(item.iceAmount)}</span>` : ""}
@@ -100,19 +102,22 @@ function render() {
     </div>
   `;
 
-  document.getElementById("status-select").addEventListener("change", (e) => {
-    order = updateOrderStatus(order.id, e.target.value);
+  document.getElementById("status-select").addEventListener("change", async (e) => {
+    order = await updateOrderStatus(order.id, e.target.value);
     showToast("주문 상태가 변경되었습니다.");
     render();
   });
 
-  document.getElementById("delete-btn").addEventListener("click", () => {
+  document.getElementById("delete-btn").addEventListener("click", async () => {
     if (confirm("이 주문을 삭제하시겠습니까?")) {
-      deleteOrder(order.id);
+      await deleteOrder(order.id);
       showToast("주문이 삭제되었습니다.");
       window.location.href = "list.html";
     }
   });
 }
 
-render();
+if (authed) {
+  [order, beanOrigins] = await Promise.all([id ? getOrderById(id) : null, getBeanOrigins()]);
+  render();
+}

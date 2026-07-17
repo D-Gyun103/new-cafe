@@ -15,7 +15,7 @@ import {
   getFeedbackCategoryName,
 } from "../js/utils.js";
 
-const authed = requireCustomerAuth("../login.html");
+const authed = await requireCustomerAuth("../login.html");
 renderAuthNav("../login.html", "../index.html");
 initMobileNav();
 
@@ -44,18 +44,21 @@ const myFeedbackRoot = document.getElementById("my-feedback-root");
 const myFeedbackCount = document.getElementById("my-feedback-count");
 const feedbackEmpty = document.getElementById("feedback-empty");
 
-function renderProfile() {
-  const customer = getCurrentCustomer();
-  profileName.textContent = customer.name;
-  profileEmail.textContent = customer.email;
-  profileJoined.textContent = customer.joinedAt;
-  profileAvatar.textContent = customer.name.slice(0, 1);
+let currentCustomer = null;
+
+async function renderProfile() {
+  currentCustomer = await getCurrentCustomer();
+  profileName.textContent = currentCustomer.name;
+  profileEmail.textContent = currentCustomer.email;
+  profileJoined.textContent = currentCustomer.joinedAt;
+  profileAvatar.textContent = currentCustomer.name.slice(0, 1);
 }
 
-function renderSummary() {
+async function renderSummary() {
+  const [cartTotal, orders] = await Promise.all([getCartTotal(), getOrders()]);
   basketCount.textContent = `${getCartCount()}개`;
-  basketTotal.textContent = formatPrice(getCartTotal());
-  orderCount.textContent = `${getOrders().length}건`;
+  basketTotal.textContent = formatPrice(cartTotal);
+  orderCount.textContent = `${orders.length}건`;
 }
 
 /** 내가 쓴 건의·불편사항과, 운영진이 남긴 답변을 함께 보여준다. */
@@ -84,11 +87,8 @@ function feedbackItemHTML(feedback) {
   `;
 }
 
-function renderMyFeedback() {
-  const customer = getCurrentCustomer();
-  const feedbacks = getFeedbacksByCustomer(customer.id).sort((a, b) =>
-    b.createdAt.localeCompare(a.createdAt)
-  );
+async function renderMyFeedback() {
+  const feedbacks = await getFeedbacksByCustomer(currentCustomer.id);
 
   myFeedbackCount.textContent = `총 ${feedbacks.length}건`;
 
@@ -117,9 +117,8 @@ mypageTabs.addEventListener("click", (e) => {
 });
 
 function openEditForm() {
-  const customer = getCurrentCustomer();
-  nameInput.value = customer.name;
-  emailInput.value = customer.email;
+  nameInput.value = currentCustomer.name;
+  emailInput.value = currentCustomer.email;
   profileView.hidden = true;
   profileEditForm.hidden = false;
   nameInput.focus();
@@ -133,28 +132,28 @@ function closeEditForm() {
 editProfileBtn.addEventListener("click", openEditForm);
 cancelEditBtn.addEventListener("click", closeEditForm);
 
-profileEditForm.addEventListener("submit", (e) => {
+profileEditForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = nameInput.value.trim();
   const email = emailInput.value.trim();
   if (!name || !email) return;
 
-  updateCurrentCustomer({ name, email });
-  renderProfile();
+  await updateCurrentCustomer({ name, email });
+  await renderProfile();
   closeEditForm();
 });
 
-withdrawBtn.addEventListener("click", () => {
+withdrawBtn.addEventListener("click", async () => {
   const confirmed = confirm("정말 탈퇴하시겠습니까? 계정 정보가 삭제되며 되돌릴 수 없습니다.");
   if (!confirmed) return;
 
-  withdrawCurrentCustomer();
+  await withdrawCurrentCustomer();
   alert("탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.");
   window.location.href = "../index.html";
 });
 
 if (authed) {
-  renderProfile();
+  await renderProfile();
   renderSummary();
 }
 updateCartBadge();

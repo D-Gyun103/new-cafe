@@ -12,13 +12,14 @@ import {
   requireAdminAuth,
 } from "../../js/utils.js";
 
-requireAdminAuth();
+const authed = await requireAdminAuth();
 
 const listEl = document.getElementById("order-list");
 const emptyState = document.getElementById("empty-state");
 const resultCount = document.getElementById("result-count");
 const tabsEl = document.getElementById("status-tabs");
 
+let allOrders = [];
 let activeStatus = "all";
 
 function renderTabs() {
@@ -69,7 +70,7 @@ function orderRowHTML(order) {
 }
 
 function render() {
-  const orders = getOrders().filter(
+  const orders = allOrders.filter(
     (order) => activeStatus === "all" || (order.status ?? "received") === activeStatus
   );
 
@@ -84,6 +85,11 @@ function render() {
   listEl.innerHTML = orders.map(orderRowHTML).join("");
 }
 
+async function reload() {
+  allOrders = await getOrders();
+  render();
+}
+
 tabsEl.addEventListener("click", (e) => {
   const btn = e.target.closest(".tab");
   if (!btn) return;
@@ -93,24 +99,26 @@ tabsEl.addEventListener("click", (e) => {
   render();
 });
 
-listEl.addEventListener("change", (e) => {
+listEl.addEventListener("change", async (e) => {
   const select = e.target.closest("[data-status-select]");
   if (!select) return;
   const row = select.closest("[data-order-id]");
-  updateOrderStatus(row.dataset.orderId, select.value);
+  await updateOrderStatus(row.dataset.orderId, select.value);
   showToast("주문 상태가 변경되었습니다.");
-  render();
+  reload();
 });
 
-listEl.addEventListener("click", (e) => {
+listEl.addEventListener("click", async (e) => {
   const deleteBtn = e.target.closest("[data-delete-id]");
   if (!deleteBtn) return;
   if (confirm("이 주문을 삭제하시겠습니까?")) {
-    deleteOrder(deleteBtn.dataset.deleteId);
+    await deleteOrder(deleteBtn.dataset.deleteId);
     showToast("주문이 삭제되었습니다.");
-    render();
+    reload();
   }
 });
 
-renderTabs();
-render();
+if (authed) {
+  renderTabs();
+  reload();
+}

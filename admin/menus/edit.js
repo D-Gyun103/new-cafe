@@ -8,19 +8,18 @@ import {
   requireAdminAuth,
 } from "../../js/utils.js";
 
-requireAdminAuth();
+const authed = await requireAdminAuth();
 
 const root = document.getElementById("menu-form-root");
 const id = getQueryParam("id");
-const menu = id ? getMenuById(id) : null;
 
-function categoryOptions() {
+function categoryOptions(menu) {
   return CATEGORIES.map(
     (c) => `<option value="${c.id}" ${c.id === menu.category ? "selected" : ""}>${c.name}</option>`
   ).join("");
 }
 
-function temperatureCheckboxes() {
+function temperatureCheckboxes(menu) {
   return TEMPERATURES.map(
     (t) => `
       <label>
@@ -33,7 +32,7 @@ function temperatureCheckboxes() {
   ).join("");
 }
 
-function badgeOptions() {
+function badgeOptions(menu) {
   const options = [
     { value: "", label: "없음" },
     { value: "BEST", label: "BEST" },
@@ -47,7 +46,7 @@ function badgeOptions() {
     .join("");
 }
 
-function render() {
+function render(menu) {
   if (!menu) {
     root.innerHTML = `
       <div class="empty-state">
@@ -81,7 +80,7 @@ function render() {
 
           <div class="field">
             <label for="category">카테고리</label>
-            <select id="category" name="category" required>${categoryOptions()}</select>
+            <select id="category" name="category" required>${categoryOptions(menu)}</select>
           </div>
 
           <div class="field">
@@ -96,12 +95,12 @@ function render() {
 
           <div class="field" id="temperature-field">
             <label>온도 옵션</label>
-            <div class="checkbox-group" id="temperature-group">${temperatureCheckboxes()}</div>
+            <div class="checkbox-group" id="temperature-group">${temperatureCheckboxes(menu)}</div>
           </div>
 
           <div class="field">
             <label for="badge">뱃지</label>
-            <select id="badge" name="badge">${badgeOptions()}</select>
+            <select id="badge" name="badge">${badgeOptions(menu)}</select>
           </div>
 
           <div class="field">
@@ -150,11 +149,13 @@ function render() {
   categorySelect.addEventListener("change", updateTemperatureFieldVisibility);
   updateTemperatureFieldVisibility();
 
-  document.getElementById("menu-form").addEventListener("submit", (e) => {
+  document.getElementById("menu-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
 
-    updateMenu(menu.id, {
+    await updateMenu(menu.id, {
       name: formData.get("name").trim(),
       image: formData.get("image").trim(),
       category: formData.get("category"),
@@ -173,4 +174,7 @@ function render() {
   });
 }
 
-render();
+if (authed) {
+  const menu = id ? await getMenuById(id) : null;
+  render(menu);
+}

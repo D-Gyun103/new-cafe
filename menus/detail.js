@@ -16,18 +16,18 @@ import {
 
 const root = document.getElementById("menu-detail-root");
 const id = getQueryParam("id");
-const menu = id ? getMenuById(id) : null;
-const isCoffee = menu?.category === "coffee";
-const isDrink = Boolean(menu?.temperatures?.length);
-const beanOrigins = isCoffee ? getBeanOrigins() : [];
-const firstAvailableOrigin = beanOrigins.find((o) => !o.soldOut) ?? beanOrigins[0] ?? null;
 
-let selectedTemp = menu?.temperatures?.[0] ?? null;
-let selectedSize = isDrink ? SIZE_OPTIONS[0].id : null;
-let selectedOrigin = isCoffee ? firstAvailableOrigin?.id ?? null : null;
-let selectedShot = isCoffee ? SHOT_OPTIONS[0].id : null;
-let selectedWater = isDrink ? WATER_OPTIONS[0].id : null;
-let selectedIce = isDrink ? ICE_OPTIONS[0].id : null;
+let menu = null;
+let isCoffee = false;
+let isDrink = false;
+let beanOrigins = [];
+
+let selectedTemp = null;
+let selectedSize = null;
+let selectedOrigin = null;
+let selectedShot = null;
+let selectedWater = null;
+let selectedIce = null;
 let requestText = "";
 let quantity = 1;
 
@@ -327,7 +327,24 @@ function updateQuantityUI() {
   );
 }
 
-render();
+async function init() {
+  menu = id ? await getMenuById(id) : null;
+  isCoffee = menu?.category === "coffee";
+  isDrink = Boolean(menu?.temperatures?.length);
+  beanOrigins = isCoffee ? await getBeanOrigins() : [];
+  const firstAvailableOrigin = beanOrigins.find((o) => !o.soldOut) ?? beanOrigins[0] ?? null;
+
+  selectedTemp = menu?.temperatures?.[0] ?? null;
+  selectedSize = isDrink ? SIZE_OPTIONS[0].id : null;
+  selectedOrigin = isCoffee ? firstAvailableOrigin?.id ?? null : null;
+  selectedShot = isCoffee ? SHOT_OPTIONS[0].id : null;
+  selectedWater = isDrink ? WATER_OPTIONS[0].id : null;
+  selectedIce = isDrink ? ICE_OPTIONS[0].id : null;
+
+  render();
+}
+
+init();
 updateCartBadge();
 renderAuthNav("../login.html", "../index.html");
 initMobileNav();

@@ -4,7 +4,7 @@ const params = new URLSearchParams(window.location.search);
 const redirect = params.get("redirect");
 const defaultTarget = "my/index.html";
 
-if (isCustomerAuthed()) {
+if (await isCustomerAuthed()) {
   window.location.href = redirect || defaultTarget;
 }
 
@@ -25,16 +25,20 @@ passwordToggle.addEventListener("click", () => {
   passwordToggle.setAttribute("aria-label", showing ? "비밀번호 표시" : "비밀번호 숨기기");
 });
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = new FormData(form);
-  const username = formData.get("username").trim();
+  const email = formData.get("email").trim();
   const password = formData.get("password").trim();
 
-  if (loginCustomer(username, password)) {
+  const submitBtn = form.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+
+  if (await loginCustomer(email, password)) {
     window.location.href = redirect || defaultTarget;
     return;
   }
 
+  submitBtn.disabled = false;
   errorEl.hidden = false;
 });

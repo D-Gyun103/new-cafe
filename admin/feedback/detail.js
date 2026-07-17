@@ -9,11 +9,11 @@ import {
   requireAdminAuth,
 } from "../../js/utils.js";
 
-requireAdminAuth();
+const authed = await requireAdminAuth();
 
 const root = document.getElementById("feedback-detail-root");
 const id = getQueryParam("id");
-let feedback = id ? getFeedbackById(id) : null;
+let feedback = null;
 
 function render() {
   if (!feedback) {
@@ -62,24 +62,27 @@ function render() {
     </div>
   `;
 
-  document.getElementById("reply-btn").addEventListener("click", () => {
+  document.getElementById("reply-btn").addEventListener("click", async () => {
     const replyText = document.getElementById("reply-input").value.trim();
     if (!replyText) {
       showToast("답변 내용을 입력해주세요.");
       return;
     }
-    feedback = replyToFeedback(feedback.id, replyText);
+    feedback = await replyToFeedback(feedback.id, replyText);
     showToast("답변이 저장되었습니다.");
     render();
   });
 
-  document.getElementById("delete-btn").addEventListener("click", () => {
+  document.getElementById("delete-btn").addEventListener("click", async () => {
     if (confirm("이 건의사항을 삭제하시겠습니까?")) {
-      deleteFeedback(feedback.id);
+      await deleteFeedback(feedback.id);
       showToast("삭제되었습니다.");
       window.location.href = "list.html";
     }
   });
 }
 
-render();
+if (authed) {
+  feedback = id ? await getFeedbackById(id) : null;
+  render();
+}

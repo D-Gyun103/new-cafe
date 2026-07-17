@@ -9,6 +9,7 @@ import {
   getOrderStatusBadgeClass,
   renderAuthNav,
   initMobileNav,
+  getBeanOrigins,
   getBeanOriginName,
   getSizeOptionName,
   getShotOptionName,
@@ -18,7 +19,7 @@ import {
 
 const root = document.getElementById("order-detail-root");
 const id = getQueryParam("id");
-const order = id ? getOrderById(id) : null;
+let beanOrigins = [];
 
 function itemRowHTML(item) {
   return `
@@ -34,7 +35,7 @@ function itemRowHTML(item) {
         <div class="order-item__meta">
           ${item.temperature ? `<span class="badge badge-category">${item.temperature}</span>` : ""}
           ${item.size ? `<span class="badge badge-category">${getSizeOptionName(item.size)}</span>` : ""}
-          ${item.origin ? `<span class="badge badge-category">${getBeanOriginName(item.origin)}</span>` : ""}
+          ${item.origin ? `<span class="badge badge-category">${getBeanOriginName(beanOrigins, item.origin)}</span>` : ""}
           ${getShotOptionName(item.shotOption) ? `<span class="badge badge-category">${getShotOptionName(item.shotOption)}</span>` : ""}
           ${getWaterOptionName(item.waterAmount) ? `<span class="badge badge-category">${getWaterOptionName(item.waterAmount)}</span>` : ""}
           ${getIceOptionName(item.iceAmount) ? `<span class="badge badge-category">${getIceOptionName(item.iceAmount)}</span>` : ""}
@@ -46,7 +47,7 @@ function itemRowHTML(item) {
   `;
 }
 
-function render() {
+function render(order) {
   if (!order) {
     root.innerHTML = `
       <div class="empty-state">
@@ -87,7 +88,13 @@ function render() {
   `;
 }
 
-render();
+async function init() {
+  const [order, origins] = await Promise.all([id ? getOrderById(id) : null, getBeanOrigins()]);
+  beanOrigins = origins;
+  render(order);
+}
+
+init();
 updateCartBadge();
 renderAuthNav("../login.html", "../index.html");
 initMobileNav();

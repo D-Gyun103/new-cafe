@@ -4,7 +4,7 @@ const params = new URLSearchParams(window.location.search);
 const redirect = params.get("redirect");
 const defaultTarget = "my/index.html";
 
-if (isCustomerAuthed()) {
+if (await isCustomerAuthed()) {
   window.location.href = redirect || defaultTarget;
 }
 
@@ -30,18 +30,21 @@ function showError(message) {
   errorEl.hidden = false;
 }
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = new FormData(form);
-  const username = formData.get("username").trim();
-  const password = formData.get("password").trim();
   const name = formData.get("name").trim();
   const email = formData.get("email").trim();
+  const password = formData.get("password").trim();
 
-  if (!username || !password || !name || !email) return;
+  if (!name || !email || !password) return;
 
-  const result = registerCustomer({ username, password, name, email });
+  const submitBtn = form.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+
+  const result = await registerCustomer({ email, password, name });
   if (!result.ok) {
+    submitBtn.disabled = false;
     showError(result.error);
     return;
   }
