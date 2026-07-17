@@ -239,3 +239,13 @@ cafe-app/
 - [x] `menus/detail.js` — 품절 원두는 선택 불가(비활성화)로 표시, 기본 선택값도 품절이 아닌 원두로 자동 지정
 - [x] `index.js` — 홈 히어로 "원두 소개" 슬라이드에도 품절 여부 반영
 - [x] 관리자 대시보드에 "원두 관리" 바로가기 추가
+
+### 13단계: Supabase 연동 (localStorage 목업 → 실제 백엔드)
+
+- [x] `js/supabaseClient.js` — esm.sh CDN으로 supabase-js 클라이언트 생성
+- [x] `supabase/schema.sql` — menus, bean_origins, profiles, admins, orders, order_items, feedbacks 테이블 + RLS 정책 + 시드 데이터, Supabase MCP로 실제 프로젝트에 적용 완료
+- [x] `js/utils.js` — 메뉴/원두/주문/건의함 CRUD를 Supabase 비동기 호출로 전환, 고객 인증은 Supabase Auth(`registerCustomer`/`loginCustomer`) 기반으로 변경
+- [x] 관리자 로그인(`admin/login.js`)도 Supabase Auth 이메일 로그인 + `admins` 테이블 검사(`is_admin()`)로 전환
+- [x] 장바구니(`CART_KEY`)와 비회원 주문(`GUEST_ORDERS_KEY`)은 계정이 없으므로 그대로 localStorage 유지
+- [x] `.mcp.json` — Supabase MCP 서버 연결 설정 (프로젝트 스코프, PAT는 `SUPABASE_ACCESS_TOKEN` 환경변수로 참조)
+- [x] 관리자 계정(`himymy2@naver.com`)을 `admins` 테이블에 등록, 로그인 확인 완료
