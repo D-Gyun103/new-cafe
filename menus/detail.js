@@ -123,6 +123,7 @@ function renderShotOptions() {
 
 function renderWaterIceOptions() {
   if (!isDrink) return "";
+  const showIce = selectedTemp !== "HOT";
   return `
     <div class="menu-detail__section">
       <h3>물 양</h3>
@@ -135,6 +136,9 @@ function renderWaterIceOptions() {
           `
         ).join("")}
       </div>
+      ${
+        showIce
+          ? `
       <h3>얼음 양</h3>
       <div class="choice-options" id="ice-options">
         ${ICE_OPTIONS.map(
@@ -145,6 +149,9 @@ function renderWaterIceOptions() {
           `
         ).join("")}
       </div>
+      `
+          : ""
+      }
     </div>
   `;
 }
@@ -225,8 +232,12 @@ function render() {
       const btn = e.target.closest(".temp-option");
       if (!btn) return;
       selectedTemp = btn.dataset.temp;
-      tempOptions.querySelectorAll(".temp-option").forEach((el) => el.classList.remove("is-active"));
-      btn.classList.add("is-active");
+      if (selectedTemp === "HOT") {
+        selectedIce = null;
+      } else if (!selectedIce) {
+        selectedIce = ICE_OPTIONS[0].id;
+      }
+      render();
     });
   }
 
@@ -339,7 +350,7 @@ async function init() {
   selectedOrigin = isCoffee ? firstAvailableOrigin?.id ?? null : null;
   selectedShot = isCoffee ? SHOT_OPTIONS[0].id : null;
   selectedWater = isDrink ? WATER_OPTIONS[0].id : null;
-  selectedIce = isDrink ? ICE_OPTIONS[0].id : null;
+  selectedIce = isDrink && selectedTemp !== "HOT" ? ICE_OPTIONS[0].id : null;
 
   render();
 }
