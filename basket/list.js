@@ -10,6 +10,7 @@ import {
   updateCartBadge,
   renderAuthNav,
   initMobileNav,
+  initBackLink,
   getBeanOrigins,
   getBeanOriginName,
   getSizeOptionName,
@@ -130,3 +131,4 @@ orderBtn.addEventListener("click", async () => {
 render();
 renderAuthNav("../login.html", "../index.html");
 initMobileNav();
+initBackLink("../menus/list.html");

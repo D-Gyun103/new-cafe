@@ -156,15 +156,21 @@ create policy "order_items_insert_own" on public.order_items
 create policy "order_items_admin_delete" on public.order_items
   for delete using (public.is_admin());
 
--- feedbacks: 본인 건의만 조회/생성, 답변 등록·삭제는 관리자만
+-- feedbacks: 본인 건의만 조회/생성, 답변 등록은 관리자만
+-- 삭제/수정은 관리자이거나, 본인 건의사항이면서 아직 답변이 달리기 전(reply is null)까지만 가능
 create policy "feedbacks_select_own_or_admin" on public.feedbacks
   for select using (auth.uid() = customer_id or public.is_admin());
 create policy "feedbacks_insert_own" on public.feedbacks
   for insert with check (auth.uid() = customer_id);
 create policy "feedbacks_admin_update" on public.feedbacks
   for update using (public.is_admin());
+create policy "feedbacks_own_update_pending" on public.feedbacks
+  for update using (auth.uid() = customer_id and reply is null)
+  with check (auth.uid() = customer_id and reply is null);
 create policy "feedbacks_admin_delete" on public.feedbacks
   for delete using (public.is_admin());
+create policy "feedbacks_own_delete_pending" on public.feedbacks
+  for delete using (auth.uid() = customer_id and reply is null);
 
 -- ---------- 시드 데이터 (기존 js/data.js의 INITIAL_MENUS / BEAN_ORIGINS 이관) ----------
 

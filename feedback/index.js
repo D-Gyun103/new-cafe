@@ -6,11 +6,13 @@ import {
   requireCustomerAuth,
   renderAuthNav,
   initMobileNav,
+  initBackLink,
 } from "../js/utils.js";
 
 await requireCustomerAuth("../login.html");
 renderAuthNav("../login.html", "../index.html");
 initMobileNav();
+initBackLink("../index.html");
 
 const form = document.getElementById("feedback-form");
 const categoryGroup = document.getElementById("category-group");
@@ -36,10 +38,10 @@ form.addEventListener("submit", async (e) => {
     content: formData.get("content").trim(),
   });
 
-  submitBtn.disabled = false;
   showToast("소중한 의견 감사합니다. 접수되었습니다.");
-  form.reset();
-  categoryGroup.querySelector("input").checked = true;
+  setTimeout(() => {
+    window.location.href = "../my/index.html?tab=feedback";
+  }, 1200);
 });
 
 updateCartBadge();

@@ -7,6 +7,7 @@ import {
   getQueryParam,
   renderAuthNav,
   initMobileNav,
+  initBackLink,
 } from "../js/utils.js";
 
 const root = document.getElementById("menu-root");
@@ -134,3 +135,4 @@ init();
 updateCartBadge();
 renderAuthNav("../login.html", "../index.html");
 initMobileNav();
+initBackLink("../index.html");

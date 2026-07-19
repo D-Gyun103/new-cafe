@@ -8,6 +8,7 @@ import {
   getOrderStatusBadgeClass,
   renderAuthNav,
   initMobileNav,
+  initBackLink,
 } from "../js/utils.js";
 
 const root = document.getElementById("orders-root");
@@ -54,3 +55,4 @@ render();
 updateCartBadge();
 renderAuthNav("../login.html", "../index.html");
 initMobileNav();
+initBackLink("../menus/list.html");

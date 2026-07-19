@@ -5,6 +5,7 @@ import {
   requireCustomerAuth,
   renderAuthNav,
   initMobileNav,
+  initBackLink,
   getCartCount,
   getCartTotal,
   getOrders,
@@ -13,11 +14,13 @@ import {
   updateCartBadge,
   getFeedbacksByCustomer,
   getFeedbackCategoryName,
+  getQueryParam,
 } from "../js/utils.js";
 
 const authed = await requireCustomerAuth("../login.html");
 renderAuthNav("../login.html", "../index.html");
 initMobileNav();
+initBackLink("../index.html");
 
 const profileAvatar = document.getElementById("profile-avatar");
 const profileView = document.getElementById("profile-view");
@@ -61,11 +64,11 @@ async function renderSummary() {
   orderCount.textContent = `${orders.length}건`;
 }
 
-/** 내가 쓴 건의·불편사항과, 운영진이 남긴 답변을 함께 보여준다. */
+/** 목록에서는 요약만 보여주고, 누르면 feedback-detail.html에서 전체 내용과 답변을 볼 수 있다. */
 function feedbackItemHTML(feedback) {
   const isAnswered = Boolean(feedback.reply);
   return `
-    <article class="my-feedback-item glass-card">
+    <a class="my-feedback-item glass-card" href="feedback-detail.html?id=${feedback.id}">
       <div class="my-feedback-item__top">
         <span class="badge badge-category">${getFeedbackCategoryName(feedback.category)}</span>
         <span class="badge ${isAnswered ? "badge-new" : "badge-best"}">${isAnswered ? "답변완료" : "답변대기"}</span>
@@ -73,17 +76,7 @@ function feedbackItemHTML(feedback) {
       </div>
       <h3 class="my-feedback-item__title">${feedback.title}</h3>
       <p class="my-feedback-item__content">${feedback.content}</p>
-      ${
-        isAnswered
-          ? `
-            <div class="my-feedback-item__reply">
-              <p class="my-feedback-item__reply-label">운영진 답변 · ${formatDateTime(feedback.repliedAt)}</p>
-              <p class="my-feedback-item__reply-content">${feedback.reply}</p>
-            </div>
-          `
-          : `<p class="my-feedback-item__pending">아직 답변이 등록되지 않았습니다.</p>`
-      }
-    </article>
+    </a>
   `;
 }
 
@@ -155,5 +148,6 @@ withdrawBtn.addEventListener("click", async () => {
 if (authed) {
   await renderProfile();
   renderSummary();
+  if (getQueryParam("tab") === "feedback") switchTab("feedback");
 }
 updateCartBadge();

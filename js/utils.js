@@ -166,6 +166,23 @@ export function initMobileNav() {
   window.addEventListener("resize", closeMenu);
 }
 
+/**
+ * id="back-link" 버튼이 있는 페이지에서 호출하면, 브라우저 히스토리가 있을 때
+ * 사용자가 있던 이전 페이지로 돌아가고, 직접 주소로 들어와 히스토리가 없으면
+ * fallbackHref(예: "../menus/list.html")로 이동한다.
+ */
+export function initBackLink(fallbackHref) {
+  const btn = document.getElementById("back-link");
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = fallbackHref;
+    }
+  });
+}
+
 /* ---------- 메뉴 (Supabase: 누구나 조회, 관리자만 쓰기) ---------- */
 
 function mapMenuRow(row) {
@@ -786,6 +803,18 @@ export async function createFeedback({ category, title, content }) {
     console.error("createFeedback", error);
     return null;
   }
+  return mapFeedbackRow(data);
+}
+
+/** 작성자 본인이 아직 답변받기 전인 자신의 건의사항을 수정할 때 쓴다 (RLS가 답변 후에는 막는다). */
+export async function updateFeedback(id, { category, title, content }) {
+  const { data, error } = await supabase
+    .from("feedbacks")
+    .update({ category, title, content })
+    .eq("id", id)
+    .select()
+    .maybeSingle();
+  if (error || !data) return null;
   return mapFeedbackRow(data);
 }
 

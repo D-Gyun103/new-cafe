@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>주문 내역 | 카페</title>
+  <title>건의·불편 상세 | 카페</title>
   <link rel="stylesheet" href="../css/variables.css" />
-  <link rel="stylesheet" href="list.css" />
+  <link rel="stylesheet" href="feedback-detail.css" />
 </head>
 <body>
   <header class="page-header">
     <button class="back-link" id="back-link" type="button">← 뒤로가기</button>
-    <div class="page-header__title">주문 내역</div>
+    <div class="page-header__title">건의·불편 상세</div>
     <div class="page-header__actions">
       <button class="nav-toggle" id="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-menu">
         <span class="nav-toggle__bar"></span>
@@ -30,16 +30,8 @@
     </div>
   </header>
 
-  <main class="container orders">
-    <div class="orders__list" id="orders-root"></div>
+  <main class="container feedback-detail" id="feedback-detail-root"></main>
 
-    <div class="empty-state" id="empty-state" hidden>
-      <div class="empty-state__icon">🧾</div>
-      <p>아직 주문 내역이 없습니다.</p>
-      <a class="btn btn-primary btn-sm" href="../menus/list.html">메뉴 보러 가기</a>
-    </div>
-  </main>
-
-  <script type="module" src="list.js"></script>
+  <script type="module" src="feedback-detail.js"></script>
 </body>
 </html>
